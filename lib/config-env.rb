@@ -1,4 +1,4 @@
-require "config-env/version"
+require "config/env/version"
 
 module Config
   module Env

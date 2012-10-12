@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/config-env/version', __FILE__)
+require File.expand_path('../lib/config/env/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Ryan Carver"]
@@ -14,4 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "config-env"
   gem.require_paths = ["lib"]
   gem.version       = Config::Env::VERSION
+
+  gem.add_development_dependency "rake"
+  gem.add_development_dependency "minitest", "~>2.0"
 end
