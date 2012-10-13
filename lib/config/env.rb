@@ -1,6 +1,5 @@
 require "config/env/version"
 
-require "config/env/loggable"
 require "config/env/method_missing"
 
 require "config/env/event_handler"

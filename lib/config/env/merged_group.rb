@@ -3,7 +3,6 @@ module Config
     # A merged group contains the union of keys from a set of groups. However,
     # the value of a key is the value of the last group.
     class MergedGroup
-      include Config::Env::Loggable
       include Config::Env::MethodMissing
 
       # Internal: Initialize a merged group.
