@@ -11,7 +11,7 @@ module Config
     #     group.age  # => 33
     #
     class Group
-      #include Config::Core::Loggable
+      include Config::Env::Loggable
       include Config::Env::MethodMissing
 
       # Internal: Initialize a new group.
