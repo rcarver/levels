@@ -14,6 +14,7 @@ module Config
       def initialize(name, groups)
         @name = name
         @groups = groups
+        @event_handler = Config::Env.event_handler
       end
 
       # See Config::Env::Group#[].
@@ -21,32 +22,15 @@ module Config
         groups = @groups.find_all { |group| group.defined?(key) }
         raise UnknownKey if groups.empty?
 
-        group = groups.last
-        value = group[key]
+        # Notify that a key was read.
+        @event_handler.on_read_from_merged_group(
+          @name,
+          key,
+          groups.map { |g| [g._level_name, g[key]] }
+        )
 
-        base_color = :magenta
-        alt_color  = :cyan
-
-        if groups.size == 1
-          log << log.colorize("Read #{@name}.#{key} => #{value.inspect} from #{group._level_name}", base_color)
-        else
-          log << log.colorize("Read #{@name}.#{key}", base_color)
-          log.indent do
-            groups.each.with_index do |g, index|
-              value = g[key]
-              if index == groups.size - 1
-                word = "Use "
-                color = base_color
-              else
-                word = "Skip"
-                color = alt_color
-              end
-              log << log.colorize("#{word} #{value.inspect} from #{g._level_name}", color)
-            end
-          end
-        end
-
-        value
+        # Return the value.
+        groups.last[key]
       end
 
       # See Config::Env::Group#defined?
@@ -57,6 +41,9 @@ module Config
       def to_s
         "<Config::Env::MergedGroup #{name}>"
       end
+
+      # Dependency Injection for testing.
+      attr_writer :event_handler
     end
   end
 end

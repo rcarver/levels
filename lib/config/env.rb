@@ -3,6 +3,7 @@ require "config/env/version"
 require "config/env/loggable"
 require "config/env/method_missing"
 
+require "config/env/event_handler"
 require "config/env/group"
 require "config/env/level"
 require "config/env/merged"
@@ -32,6 +33,13 @@ module Config
       Merged.new(levels)
     end
 
+    def self.event_handler=(event_handler)
+      @event_handler = event_handler
+    end
+
+    def self.event_handler
+      @event_handler || Config::Env::NullEventHandler.new
+    end
   end
 end
 

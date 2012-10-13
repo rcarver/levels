@@ -19,32 +19,55 @@ describe Config::Env::MergedGroup do
     subject.c.must_equal 3
   end
 
-  it "logs when a single-level, top level variable is used" do
-    subject.b
-    log_string.must_equal <<-STR
-Read test.b => 2 from g1
-    STR
-  end
+  describe "outputs" do
 
-  it "logs when a single-level, lower level variable is used" do
-    subject.c
-    log_string.must_equal <<-STR
-Read test.c => 3 from g2
-    STR
-  end
+    let(:event_handler) { MiniTest::Mock.new }
 
-  it "logs when a multi-level variable is used" do
-    subject.a
-    log_string.must_equal <<-STR
-Read test.a
-  Skip 1 from g1
-  Use  9 from g2
-    STR
-  end
+    before do
+      subject.event_handler = event_handler
+    end
 
-  it "does not log a bad key" do
-    proc { subject.foo }.must_raise Config::Env::UnknownKey
-    log_string.must_be_empty
+    after do
+      event_handler.verify
+    end
+
+    it "notifies when a single-level, top level variable is used" do
+      event_handler.expect(:on_read_from_merged_group, nil, [
+        :test,
+        :b,
+        [
+          ["g1", 2]
+        ]
+      ])
+      subject.b
+    end
+
+    it "notifies when a single-level, lower level variable is used" do
+      event_handler.expect(:on_read_from_merged_group, nil, [
+        :test,
+        :c,
+        [
+          ["g2", 3]
+        ]
+      ])
+      subject.c
+    end
+
+    it "notifies when a multi-level variable is used" do
+      event_handler.expect(:on_read_from_merged_group, nil, [
+        :test,
+        :a,
+        [
+          ["g1", 1],
+          ["g2", 9]
+        ],
+      ])
+      subject.a
+    end
+
+    it "does not notify a bad key" do
+      proc { subject.foo }.must_raise Config::Env::UnknownKey
+    end
   end
 end
 
