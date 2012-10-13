@@ -2,6 +2,7 @@ module Config
   module Env
     # Enables dot syntax for levels and groups.
     module MethodMissing
+
       def method_missing(message, *args, &block)
         raise ArgumentError, "arguments are not allowed: #{message}(#{args.inspect})" if args.any?
         if message =~ /^(.*)\?$/

@@ -11,12 +11,7 @@ class UnitSpec < MiniTest::Spec
   let(:log_stream) { StringIO.new }
 
   before do
-    mod = Module.new do
-      def self.log
-        SimpleConfigLog.new(log_stream)
-      end
-    end
-    Config::Env::Loggable.impl = mod
+    Config::Env::Loggable.impl = SimpleLog.new(log_stream)
   end
 end
 
