@@ -56,6 +56,10 @@ module Config
         @name
       end
 
+      def _groups
+        @groups.values
+      end
+
     end
   end
 end

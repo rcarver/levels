@@ -55,6 +55,10 @@ module Config
         @level_name
       end
 
+      def _group_name
+        @name
+      end
+
     end
   end
 end
