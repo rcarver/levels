@@ -17,7 +17,6 @@ key/value pairs. To describe a very simple web application made up of a
 server and a task queue, you could write this (in JSON).
 
 ```json
-# cat config.json
 {
   "server": {
     "hostname": "example.com"
@@ -37,7 +36,6 @@ slight differences in development and production. Our base
 configuration defines the possible keys, with default values.
 
 ```json
-# cat base.json
 {
   "server": {
     "hostname": "localhost"
@@ -52,7 +50,6 @@ configuration defines the possible keys, with default values.
 A production configuration can override the relevant values.
 
 ```json
-# cat prod.json
 {
   "server": {
     "hostname": "example.com"
