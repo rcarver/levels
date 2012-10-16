@@ -74,7 +74,7 @@ typecast the value based on the existing configuration, or
 ### Ruby Syntax
 
 JSON and ENV variables are useful, but the most flexible format is Ruby.
-Config::Env provides a simple DSL for defining groups.
+Env provides a simple DSL for writing groups.
 
 ```ruby
 configure :server,
