@@ -121,9 +121,9 @@ configure :aws,
 
 ## Reading a configuration
 
-Once a configuration has been defined, Env lets you read it. Again,
-there are several options for reading. Consider this simple
-configuration for the following examples.
+Once a configuration has been defined, Env can read it. Again, there are
+several options for reading. Consider this simple configuration for the
+following examples.
 
 ```ruby
 configure :server,
@@ -158,15 +158,15 @@ export TASK_QUEUE_QUEUES_DELIMETER=":"
 Within a Ruby runtime, Env provides a simple syntax for reading.
 
 ```ruby
-# Dot syntax
-env.server.hostname      # => "example.com"
-env.task_queue.workers   # => 5
-env.task_queue.queues    # => ["high", "low"]
+# Dot syntax.
+env.server.hostname        # => "example.com"
+env.task_queue.workers     # => 5
+env.task_queue.queues      # => ["high", "low"]
 
-# Hash syntax
-env.server[:hostname]    # => "example.com"
-env.task_queue[:workers] # => 5
-env.task_queue[:queues]  # => ["high", "low"]
+# Hash syntax.
+env[:server][:hostname]    # => "example.com"
+env[:task_queue][:workers] # => 5
+env[:task_queue][:queues]  # => ["high", "low"]
 ```
 
 An attempt to read an unknown group or key will throw an exception.
@@ -176,7 +176,7 @@ env.some_group        # raises Config::Env::UnknownGroup
 env.server.some_value # raises Config::Env::UnknownKey
 ```
 
-Env lets you find out if a group or key exists.
+Env can find out if a group or key exists.
 
 ```ruby
 env.defined?(:other)           # => false
@@ -188,15 +188,17 @@ env.server.defined?(:hostname) # => true
 ## Typecasting
 
 In several examples, we've seen environment variables contain non-string
-data. These typecasting rules are used when using the system environment
-as Level in a configuration, as well as when exporting a configuration
-to environment variables.
+data. The following typecasting rules are used when using the system
+environment as Level in a configuration, as well as when exporting a
+configuration to environment variables.
 
 ```sh
 # A configuration value has this form.
 [PREFIX]<GROUP>_<KEY>
+
 # The type of that value can be set here.
 [PREFIX]<GROUP>_<KEY>_TYPE
+
 # The type may require more information for conversion, in which case
 # additional keys may be used.
 [PREFIX]<GROUP>_<KEY>_<OTHER>
