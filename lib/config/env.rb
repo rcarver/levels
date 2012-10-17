@@ -8,7 +8,7 @@ require "config/env/level"
 require "config/env/merged"
 require "config/env/merged_group"
 
-require "config/env/load/environment"
+require "config/env/load/system"
 
 module Config
   # The Config::Env is a collection key/value pairs organized into groups.

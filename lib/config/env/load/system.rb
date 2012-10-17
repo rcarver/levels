@@ -1,7 +1,7 @@
 module Config
   module Env
     module Load
-      # This parser creates an env level from the system environment
+      # This loader creates an env level from the system environment
       # (ENV in ruby). It does so by using an existing level as a
       # template for the group names and values. For each value, it
       # attempts to typecast a String value into the same type found in
@@ -21,9 +21,9 @@ module Config
       #     SETTINGS_WORKERS=1
       #     SETTINGS_QUEUES=high:low:other
       #
-      class Environment
+      class System
 
-        # Initialize a new environment loader.
+        # Initialize a new system loader.
         #
         # template_level - Config::Env::Level that defines the possible
         #                  keys.

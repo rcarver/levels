@@ -1,17 +1,17 @@
 require 'helper'
 
-describe Config::Env::Load::Environment do
+describe Config::Env::Load::System do
 
   let(:template) { Config::Env::Level.new("template") }
   let(:prefix)   { nil }
   let(:env_hash) { {} }
 
-  subject { Config::Env::Load::Environment.new(template, prefix, env_hash) }
+  subject { Config::Env::Load::System.new(template, prefix, env_hash) }
 
   let(:loaded) { subject.load }
 
   [nil, "MY_"].each do |prefix|
-    describe "finding data in the environment with #{prefix || 'no'} prefix" do
+    describe "finding data in the System with #{prefix || 'no'} prefix" do
 
       let(:prefix) { prefix }
 
@@ -45,7 +45,7 @@ describe Config::Env::Load::Environment do
     end
   end
 
-  describe "typecasting data from the environment" do
+  describe "typecasting data from the system" do
     # TODO
   end
 end
