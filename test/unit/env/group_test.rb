@@ -60,5 +60,24 @@ describe Config::Env::Group do
       subject[:name].must_equal [:name, "ok"]
     end
   end
+
+  describe "#to_enum" do
+
+    it "returns an Enumerator" do
+      subject.to_enum.must_be_instance_of Enumerator
+    end
+
+    it "iterates over all keys and values" do
+      result = subject.to_enum.map do |k, v|
+        [k, v]
+      end
+      expected = [
+        [:name, "ok"],
+        [:value, 123],
+        [:other, nil]
+      ]
+      result.sort.must_equal expected.sort
+    end
+  end
 end
 

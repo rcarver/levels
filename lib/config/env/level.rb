@@ -52,6 +52,15 @@ module Config
         "<Config::Env::Level #{@name.inspect}>"
       end
 
+      # Returns an Enumerator which yields [group_name, Group#to_enum].
+      def to_enum
+        Enumerator.new do |y|
+          @groups.each do |name, group|
+            y << [name, group.to_enum]
+          end
+        end
+      end
+
       def _level_name
         @name
       end

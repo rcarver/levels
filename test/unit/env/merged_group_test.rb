@@ -69,5 +69,24 @@ describe Config::Env::MergedGroup do
       proc { subject.foo }.must_raise Config::Env::UnknownKey
     end
   end
+
+  describe "#to_enum" do
+
+    it "returns an Enumerator" do
+      subject.to_enum.must_be_instance_of Enumerator
+    end
+
+    it "iterates over all keys and values" do
+      result = subject.to_enum.map do |k, v|
+        [k, v]
+      end
+      expected = [
+        [:a, 9],
+        [:b, 2],
+        [:c, 3]
+      ]
+      result.sort.must_equal expected.sort
+    end
+  end
 end
 

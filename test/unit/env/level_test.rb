@@ -35,5 +35,25 @@ describe Config::Env::Level do
     subject.set_group(:test, key: 123)
     proc { subject.set_group(:test, key: 123) }.must_raise Config::Env::DuplicateGroup
   end
+
+  describe "#to_enum" do
+
+    it "returns an Enumerator" do
+      subject.to_enum.must_be_instance_of Enumerator
+    end
+
+    it "iterates over all groups" do
+      subject.set_group(:test1, key: 123)
+      subject.set_group(:test2, key: 123)
+      result = subject.to_enum.map do |k, v|
+        [k, v.class]
+      end
+      expected = [
+        [:test1, Enumerator],
+        [:test2, Enumerator]
+      ]
+      result.sort.must_equal expected.sort
+    end
+  end
 end
 

@@ -41,6 +41,21 @@ module Config
         "<Config::Env::MergedGroup #{name}>"
       end
 
+      # Returns an Enumerator which yields [key, value].
+      def to_enum
+        Enumerator.new do |y|
+          keys = Set.new
+          @groups.each do |group|
+            group.to_enum.each do |key, value|
+              keys << key
+            end
+          end
+          keys.each do |key|
+            y << [key, self[key]]
+          end
+        end
+      end
+
       # Dependency Injection for testing.
       attr_writer :event_handler
     end

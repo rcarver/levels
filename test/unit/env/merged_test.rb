@@ -44,6 +44,24 @@ describe Config::Env::Merged do
     subject.g2?.must_equal true
     subject.foo?.must_equal false
   end
+
+  describe "#to_enum" do
+
+    it "returns an Enumerator" do
+      subject.to_enum.must_be_instance_of Enumerator
+    end
+
+    it "iterates over all groups" do
+      result = subject.to_enum.map do |k, v|
+        [k, v.class]
+      end
+      expected = [
+        [:g1, Enumerator],
+        [:g2, Enumerator]
+      ]
+      result.sort.must_equal expected.sort
+    end
+  end
 end
 
 
