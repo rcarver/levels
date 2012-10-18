@@ -1,7 +1,7 @@
 module Config
   module Env
-    module Load
-      # This loader creates an env level from the system environment
+    module Read
+      # This reader creates an env level from the system environment
       # (ENV in ruby). It does so by using an existing level as a
       # template for the group names and values. For each value, it
       # attempts to typecast a String value into the same type found in
@@ -23,7 +23,7 @@ module Config
       #
       class System
 
-        # Initialize a new system loader.
+        # Initialize a new system reader.
         #
         # template_level - Config::Env::Level that defines the possible
         #                  keys.
@@ -36,7 +36,7 @@ module Config
           @env_hash = env_hash
         end
 
-        def load
+        def read
           hash = {}
 
           @template_level._groups.each do |group|

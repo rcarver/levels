@@ -1,14 +1,14 @@
 require 'helper'
 
-describe Config::Env::Load::System do
+describe Config::Env::Read::System do
 
   let(:template) { Config::Env::Level.new("template") }
   let(:prefix)   { nil }
   let(:env_hash) { {} }
 
-  subject { Config::Env::Load::System.new(template, prefix, env_hash) }
+  subject { Config::Env::Read::System.new(template, prefix, env_hash) }
 
-  let(:loaded) { subject.load }
+  let(:read) { subject.read }
 
   [nil, "MY_"].each do |prefix|
     describe "finding data in the System with #{prefix || 'no'} prefix" do
@@ -23,7 +23,7 @@ describe Config::Env::Load::System do
       it "finds variables that exist in the template" do
         env_hash["#{prefix}SAMPLE_HELLO"] = "universe"
 
-        loaded.must_equal(
+        read.must_equal(
           sample: {
             hello: "universe"
           }
@@ -34,13 +34,13 @@ describe Config::Env::Load::System do
         env_hash["#{prefix}SAMPLE_WORLD"] = "this"
         env_hash["#{prefix}OTHER_HELLO"] = "that"
 
-        loaded.must_equal({})
+        read.must_equal({})
       end
 
       it "does not find variables with another prefix" do
         env_hash["OTHER_SAMPLE_HELLO"] = "ok"
 
-        loaded.must_equal({})
+        read.must_equal({})
       end
     end
   end
