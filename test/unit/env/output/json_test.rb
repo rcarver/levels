@@ -14,9 +14,13 @@ describe Config::Env::Output::JSON do
     }
   }
 
-  subject { Config::Env::Output::JSON.new(data.to_enum) }
+  let(:json_opts) { nil }
 
-  let(:result) { subject.result }
+  subject { Config::Env::Output::JSON.new(json_opts) }
+
+  def result
+    subject.generate(data.to_enum)
+  end
 
   it "converts to JSON" do
     result.must_equal <<-STR.chomp
@@ -36,16 +40,16 @@ describe Config::Env::Output::JSON do
     STR
   end
 
-  it "allows the JSON format to be altered" do
-    subject.json_opts[:indent] = ""
-  end
 
-  it "allows the JSON format to be replaced" do
-    subject.json_opts = {}
-    result.must_equal <<-STR.chomp
+  describe "initialized with json opts" do
+
+    let(:json_opts) { {} }
+
+    it "changes the formatting" do
+      result.must_equal <<-STR.chomp
 {"group1":{"key1":"string","key2":123},"group2":{"key":[1,2,3]}}
-    STR
+      STR
+    end
   end
-
 end
 
