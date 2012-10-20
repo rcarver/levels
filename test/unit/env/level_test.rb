@@ -18,6 +18,12 @@ describe Config::Env::Level do
     subject[:test].must_be_instance_of Config::Env::Group
   end
 
+  it "handls a string group name" do
+    subject.set_group("test", key: 123)
+    subject.test.must_be_instance_of Config::Env::Group
+    subject[:test].must_be_instance_of Config::Env::Group
+  end
+
   it "raises an error if you access an unknown group" do
     proc { subject.nothing }.must_raise Config::Env::UnknownGroup
     proc { subject[:nothing] }.must_raise Config::Env::UnknownGroup
