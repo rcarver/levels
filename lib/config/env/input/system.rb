@@ -25,13 +25,12 @@ module Config
 
         # Initialize a new system reader.
         #
-        # template_level - Config::Env::Level that defines the possible
-        #                  keys.
-        # prefix         - String prefix for the keys (default: no
-        #                  prefix).
+        # template - Enumerator that defines the possible keys.
+        # prefix   - String prefix for the keys (default: no
+        #            prefix).
         #
-        def initialize(template_level, prefix = nil, env_hash = ENV)
-          @template_level = template_level
+        def initialize(template, prefix = nil, env_hash = ENV)
+          @template = template
           @prefix = prefix
           @env_hash = env_hash
         end
@@ -39,20 +38,24 @@ module Config
         def read
           hash = {}
 
-          @template_level._groups.each do |group|
-            attrs = {}
-            prefix = "#{@prefix}#{group._group_name}".upcase
+          @template.each do |group_name, group|
+            env_data = {}
+            group_data = {}
+            prefix = "#{@prefix}#{group_name}".upcase
+            group.each do |key, value|
+              group_data[key.to_sym] = value
+            end
             @env_hash.each do |key, value|
               if key =~ /^#{prefix}_(.+)$/
                 attr_name = $1.downcase.to_sym
-                if group.defined?(attr_name)
+                if group_data.key?(attr_name)
                   # TODO: typecast the value based on the value in the template level.
-                  attrs[attr_name] = value
+                  env_data[attr_name] = value
                 end
               end
             end
-            if attrs.any?
-              hash[group._group_name] = attrs
+            if env_data.any?
+              hash[group_name] = env_data
             end
           end
 

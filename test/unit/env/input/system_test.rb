@@ -2,11 +2,11 @@ require 'helper'
 
 describe Config::Env::Input::System do
 
-  let(:template) { Config::Env::Level.new("template") }
+  let(:template) { {} }
   let(:prefix)   { nil }
   let(:env_hash) { {} }
 
-  subject { Config::Env::Input::System.new(template, prefix, env_hash) }
+  subject { Config::Env::Input::System.new(template.to_enum, prefix, env_hash) }
 
   let(:read) { subject.read }
 
@@ -16,8 +16,8 @@ describe Config::Env::Input::System do
       let(:prefix) { prefix }
 
       before do
-        template.set_group(:sample, hello: "world")
-        template.set_group(:settings, hello: "world")
+        template[:sample] = { hello: "world" }.to_enum
+        template[:settings] = { hello: "world" }.to_enum
       end
 
       it "finds variables that exist in the template" do
