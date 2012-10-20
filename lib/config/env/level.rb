@@ -61,6 +61,15 @@ module Config
         end
       end
 
+      # Returns a Hash with Symbol keys.
+      def to_hash
+        hash = {}
+        @groups.each do |name, group|
+          hash[name] = group.to_hash
+        end
+        hash
+      end
+
       def _level_name
         @name
       end

@@ -60,6 +60,11 @@ module Config
         end
       end
 
+      # Returns a Hash with Symbol keys.
+      def to_hash
+        @hash.dup
+      end
+
       def _level_name
         @level_name
       end

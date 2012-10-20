@@ -88,5 +88,21 @@ describe Config::Env::Group do
       result.sort.must_equal expected.sort
     end
   end
+
+  describe "#to_hash" do
+
+    it "returns the group's data" do
+      subject.to_hash.must_equal(
+        name: "ok",
+        value: 123,
+        other: nil
+      )
+    end
+
+    it "returns a copy of the data" do
+      subject.to_hash[:name] = "foo"
+      subject[:name].must_equal "ok"
+    end
+  end
 end
 

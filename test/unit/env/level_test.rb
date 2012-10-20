@@ -55,5 +55,22 @@ describe Config::Env::Level do
       result.sort.must_equal expected.sort
     end
   end
+
+  describe "#to_hash" do
+
+    it "returns a Hash" do
+      subject.set_group(:group1, key1: "string", key2: 123)
+      subject.set_group(:group2, key: [1, 2, 3])
+      subject.to_hash.must_equal(
+        group1: {
+          key1: "string",
+          key2: 123
+        },
+        group2: {
+          key: [1, 2, 3]
+        }
+      )
+    end
+  end
 end
 
