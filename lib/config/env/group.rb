@@ -23,7 +23,7 @@ module Config
       def initialize(level_name, name, hash = {}, value_transformer = nil)
         @level_name = level_name
         @name = name
-        @hash = hash
+        @hash = symbolize_keys(hash)
         @value_transformer = value_transformer || -> key, value { value }
       end
 
@@ -66,6 +66,16 @@ module Config
 
       def _group_name
         @name
+      end
+
+    protected
+
+      def symbolize_keys(input)
+        output = {}
+        input.each do |key, value|
+          output[key.to_sym] = value
+        end
+        output
       end
 
     end

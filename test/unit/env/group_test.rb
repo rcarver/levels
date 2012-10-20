@@ -49,7 +49,16 @@ describe Config::Env::Group do
     proc { subject.name("ok") }.must_raise ArgumentError
   end
 
-  describe "with a value transformer" do
+  describe "initialized with string keys" do
+
+    it "converts everything to symbols" do
+      hash["string"] = 123
+      subject.string.must_equal 123
+      subject[:string].must_equal 123
+    end
+  end
+
+  describe "initialized with a value transformer" do
 
     let(:value_transformer) {
       -> key, value { [key, value] }
