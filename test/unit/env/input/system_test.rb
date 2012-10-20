@@ -1,12 +1,12 @@
 require 'helper'
 
-describe Config::Env::Read::System do
+describe Config::Env::Input::System do
 
   let(:template) { Config::Env::Level.new("template") }
   let(:prefix)   { nil }
   let(:env_hash) { {} }
 
-  subject { Config::Env::Read::System.new(template, prefix, env_hash) }
+  subject { Config::Env::Input::System.new(template, prefix, env_hash) }
 
   let(:read) { subject.read }
 

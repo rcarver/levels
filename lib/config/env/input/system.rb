@@ -1,7 +1,7 @@
 module Config
   module Env
-    module Read
-      # This reader creates an env level from the system environment
+    module Input
+      # This input creates an env level from the system environment
       # (ENV in ruby). It does so by using an existing level as a
       # template for the group names and values. For each value, it
       # attempts to typecast a String value into the same type found in
