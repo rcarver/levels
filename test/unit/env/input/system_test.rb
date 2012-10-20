@@ -8,7 +8,11 @@ describe Config::Env::Input::System do
 
   subject { Config::Env::Input::System.new(template.to_enum, prefix, env_hash) }
 
-  let(:read) { subject.read }
+  def read
+    level = Config::Env::Level.new("Test")
+    subject.read(level)
+    level.to_hash
+  end
 
   [nil, "MY_"].each do |prefix|
     describe "finding data in the System with #{prefix || 'no'} prefix" do

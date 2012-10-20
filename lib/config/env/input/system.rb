@@ -35,9 +35,7 @@ module Config
           @env_hash = env_hash
         end
 
-        def read
-          hash = {}
-
+        def read(level)
           @template.each do |group_name, group|
             env_data = {}
             group_data = {}
@@ -55,11 +53,9 @@ module Config
               end
             end
             if env_data.any?
-              hash[group_name] = env_data
+              level.set_group(group_name, env_data)
             end
           end
-
-          hash
         end
 
       end

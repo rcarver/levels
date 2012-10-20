@@ -10,6 +10,7 @@ require "config/env/level"
 require "config/env/merged"
 require "config/env/merged_group"
 
+require "config/env/input/json"
 require "config/env/input/system"
 
 require "config/env/output/json"
