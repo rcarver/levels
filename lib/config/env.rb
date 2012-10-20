@@ -1,3 +1,5 @@
+require "json"
+
 require "config/env/version"
 
 require "config/env/method_missing"
@@ -9,6 +11,8 @@ require "config/env/merged"
 require "config/env/merged_group"
 
 require "config/env/input/system"
+
+require "config/env/output/json"
 
 module Config
   # The Config::Env is a collection key/value pairs organized into groups.
