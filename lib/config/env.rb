@@ -14,6 +14,7 @@ require "config/env/input/json"
 require "config/env/input/system"
 
 require "config/env/output/json"
+require "config/env/output/system"
 
 module Config
   # The Config::Env is a collection key/value pairs organized into groups.
