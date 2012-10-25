@@ -78,7 +78,7 @@ describe Config::Env::MergedGroup do
 
     it "iterates over all keys and values" do
       result = subject.to_enum.map do |k, v|
-        [k, v]
+        [k.to_sym, v]
       end
       expected = [
         [:a, 9],
