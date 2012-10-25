@@ -27,6 +27,10 @@ module Config
         @hash[Key(key)]
       end
 
+      def pair(key)
+        return Key(key), self[key]
+      end
+
       def []=(key, value)
         @hash[Key(key)] = value
       end

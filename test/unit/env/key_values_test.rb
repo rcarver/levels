@@ -25,6 +25,21 @@ describe Config::Env::KeyValues do
       end
     end
 
+    describe "#pair" do
+
+      it "returns a Key and the value" do
+        key, value = subject.pair(:a)
+        key.must_equal Config::Env::Key.new(:a)
+        value.must_equal 1
+      end
+
+      it "returns a Key and nil if the key does not exist" do
+        key, value = subject.pair(:b)
+        key.must_equal Config::Env::Key.new(:b)
+        value.must_equal nil
+      end
+    end
+
     describe "#[]=" do
 
       it "handles string keys" do

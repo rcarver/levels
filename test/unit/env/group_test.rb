@@ -71,6 +71,7 @@ describe Config::Env::Group do
     it "returns the value via the transformer" do
       subject.name.must_equal [:name, "ok"]
       subject[:name].must_equal [:name, "ok"]
+      subject["name"].must_equal [:name, "ok"]
     end
   end
 

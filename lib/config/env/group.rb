@@ -33,8 +33,8 @@ module Config
       # Raises Config::Env::UnknownKey if the key is not defined.
       def [](key)
         if @key_values.key?(key)
-          value = @key_values[key]
-          @value_transformer.call(key, value)
+          key, value = @key_values.pair(key)
+          @value_transformer.call(key.to_sym, value)
         else
           raise UnknownKey, "#{key.inspect} is not defined in #{self}"
         end
