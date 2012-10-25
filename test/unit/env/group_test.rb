@@ -13,10 +13,6 @@ describe Config::Env::Group do
     hash[:other] = nil
   end
 
-  specify "#_group_name" do
-    subject._group_name.must_equal :test
-  end
-
   specify "#_level_name" do
     subject._level_name.must_equal "fake level"
   end

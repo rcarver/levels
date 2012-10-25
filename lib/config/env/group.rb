@@ -64,10 +64,6 @@ module Config
         @level_name
       end
 
-      def _group_name
-        @group_key.to_sym
-      end
-
       def eql_hash?(hash)
         @key_values == Config::Env::KeyValues.new(hash)
       end
