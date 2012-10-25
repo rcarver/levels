@@ -6,6 +6,8 @@ require "config/env/method_missing"
 
 require "config/env/event_handler"
 require "config/env/group"
+require "config/env/key"
+require "config/env/key_values"
 require "config/env/level"
 require "config/env/merged"
 require "config/env/merged_group"
