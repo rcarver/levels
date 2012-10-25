@@ -52,7 +52,7 @@ describe Config::Env::Level do
       subject.set_group(:test1, key: 123)
       subject.set_group(:test2, key: 123)
       result = subject.to_enum.map do |k, v|
-        [k, v.class]
+        [k.to_sym, v.class]
       end
       expected = [
         [:test1, Enumerator],
@@ -62,20 +62,27 @@ describe Config::Env::Level do
     end
   end
 
-  describe "#to_hash" do
+  describe "#eql_hash?" do
 
-    it "returns a Hash" do
-      subject.set_group(:group1, key1: "string", key2: 123)
-      subject.set_group(:group2, key: [1, 2, 3])
-      subject.to_hash.must_equal(
-        group1: {
-          key1: "string",
-          key2: 123
+    let(:expected) {
+      {
+        test1: {
+          key: 123
         },
-        group2: {
-          key: [1, 2, 3]
+        "test2" => {
+          "key" => 123
         }
-      )
+      }
+    }
+
+    before do
+      subject.set_group(:test1, key: 123)
+      subject.set_group(:test2, key: 123)
+    end
+
+    it "is true if the hash matches the data" do
+      subject.eql_hash?(expected).must_equal true
+      subject.eql_hash?(a: 1).must_equal false
     end
   end
 end

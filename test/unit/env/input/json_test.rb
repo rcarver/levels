@@ -18,14 +18,14 @@ describe Config::Env::Input::JSON do
 
   subject { Config::Env::Input::JSON.new(json_string) }
 
-  def read
+  def assert_level_equals_hash(hash)
     level = Config::Env::Level.new("Test")
     subject.read(level)
-    level.to_hash
+    level.eql_hash?(hash).must_equal true
   end
 
   it "reads data from the JSON structure" do
-    read.must_equal(
+    assert_level_equals_hash(
       group1: {
         key1: "string",
         key2: 123

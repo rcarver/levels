@@ -8,10 +8,10 @@ describe Config::Env::Input::System do
 
   subject { Config::Env::Input::System.new(template.to_enum, prefix, env_hash) }
 
-  def read
+  def assert_level_equals_hash(hash)
     level = Config::Env::Level.new("Test")
     subject.read(level)
-    level.to_hash
+    level.eql_hash?(hash).must_equal true
   end
 
   [nil, "MY_"].each do |prefix|
@@ -27,7 +27,7 @@ describe Config::Env::Input::System do
       it "finds variables that exist in the template" do
         env_hash["#{prefix}SAMPLE_HELLO"] = "universe"
 
-        read.must_equal(
+        assert_level_equals_hash(
           sample: {
             hello: "universe"
           }
@@ -38,13 +38,13 @@ describe Config::Env::Input::System do
         env_hash["#{prefix}SAMPLE_WORLD"] = "this"
         env_hash["#{prefix}OTHER_HELLO"] = "that"
 
-        read.must_equal({})
+        assert_level_equals_hash({})
       end
 
       it "does not find variables with another prefix" do
         env_hash["OTHER_SAMPLE_HELLO"] = "ok"
 
-        read.must_equal({})
+        assert_level_equals_hash({})
       end
     end
   end

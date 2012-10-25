@@ -93,5 +93,21 @@ describe Config::Env::Group do
       result.sort.must_equal expected.sort
     end
   end
+
+  describe "#eql_hash?" do
+
+    let(:expected) {
+      {
+        name: "ok",
+        value: 123,
+        "other" => nil
+      }
+    }
+
+    it "is true if the hash matches the data" do
+      subject.eql_hash?(expected).must_equal true
+      subject.eql_hash?(a: 1).must_equal false
+    end
+  end
 end
 

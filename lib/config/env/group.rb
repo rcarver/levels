@@ -68,6 +68,10 @@ module Config
         @group_key.to_sym
       end
 
+      def eql_hash?(hash)
+        @key_values == Config::Env::KeyValues.new(hash)
+      end
+
     end
   end
 end

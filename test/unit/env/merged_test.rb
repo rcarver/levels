@@ -53,7 +53,7 @@ describe Config::Env::Merged do
 
     it "iterates over all groups" do
       result = subject.to_enum.map do |k, v|
-        [k, v.class]
+        [k.to_sym, v.class]
       end
       expected = [
         [:g1, Enumerator],

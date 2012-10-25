@@ -15,7 +15,7 @@ module Config
       #
       def initialize(name)
         @name = name
-        @groups = {}
+        @groups = Config::Env::KeyValues.new
       end
 
       # Public: Get a group by name.
@@ -42,10 +42,10 @@ module Config
       #
       # Returns nothing.
       def set_group(group_name, hash)
-        if @groups[group_name.to_sym]
+        if @groups.key?(group_name)
           raise DuplicateGroup, "#{group_name} has already been defined"
         end
-        @groups[group_name.to_sym] = Group.new(@name, group_name.to_sym, hash)
+        @groups[group_name] = Group.new(@name, group_name, hash)
       end
 
       def to_s
@@ -61,23 +61,14 @@ module Config
         end
       end
 
-      # Returns a Hash with Symbol keys.
-      def to_hash
-        hash = {}
-        @groups.each do |name, group|
-          hash[name] = group.to_hash
-        end
-        hash
-      end
-
       def _level_name
         @name
       end
 
-      def _groups
-        @groups.values
+      def eql_hash?(hash)
+        key_values = Config::Env::KeyValues.new(hash)
+        @groups.all? { |name, group| group.eql_hash?(key_values[name]) }
       end
-
     end
   end
 end
