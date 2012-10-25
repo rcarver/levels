@@ -16,14 +16,14 @@ module Config
       # Internal: Initialize a new group.
       #
       # level_name        - String name of the level.
-      # name              - Symbol name of the group.
-      # hash              - Hash of key/values for the group.
+      # group_key         - Symbol name of the group.
+      # data              - Hash of key/values for the group.
       # value_transformer - Proc that takes (key, value) and returns value.
       #
-      def initialize(level_name, name, hash = {}, value_transformer = nil)
-        @level_name = level_name
-        @name = name
-        @hash = symbolize_keys(hash)
+      def initialize(level_name, group_key, data = {}, value_transformer = nil)
+        @level_name = level_name.to_s
+        @group_key = Config::Env::Key.new(group_key)
+        @key_values = Config::Env::KeyValues.new(data)
         @value_transformer = value_transformer || -> key, value { value }
       end
 
@@ -32,8 +32,8 @@ module Config
       # Returns the value.
       # Raises Config::Env::UnknownKey if the key is not defined.
       def [](key)
-        if @hash.key?(key)
-          value = @hash[key]
+        if @key_values.key?(key)
+          value = @key_values[key]
           @value_transformer.call(key, value)
         else
           raise UnknownKey, "#{key.inspect} is not defined in #{self}"
@@ -44,25 +44,20 @@ module Config
       #
       # Returns a Boolean.
       def defined?(key)
-        @hash.key?(key)
+        @key_values.key?(key)
       end
 
       def to_s
-        "<Config::Env::Group #{@name.inspect} (#{@level_name.inspect})>"
+        "<Config::Env::Group #{@group_key.to_sym} (#{@level_name.inspect})>"
       end
 
       # Returns an Enumerator which yields [key, value].
       def to_enum
         Enumerator.new do |y|
-          @hash.keys.each do |key|
+          @key_values.each do |key, value|
             y << [key, self[key]]
           end
         end
-      end
-
-      # Returns a Hash with Symbol keys.
-      def to_hash
-        @hash.dup
       end
 
       def _level_name
@@ -70,17 +65,7 @@ module Config
       end
 
       def _group_name
-        @name
-      end
-
-    protected
-
-      def symbolize_keys(input)
-        output = {}
-        input.each do |key, value|
-          output[key.to_sym] = value
-        end
-        output
+        @group_key.to_sym
       end
 
     end

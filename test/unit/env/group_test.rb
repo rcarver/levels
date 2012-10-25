@@ -13,12 +13,16 @@ describe Config::Env::Group do
     hash[:other] = nil
   end
 
+  specify "#_group_name" do
+    subject._group_name.must_equal :test
+  end
+
   specify "#_level_name" do
     subject._level_name.must_equal "fake level"
   end
 
   specify "#to_s" do
-    subject.to_s.must_equal "<Config::Env::Group :test (\"fake level\")>"
+    subject.to_s.must_equal "<Config::Env::Group test (\"fake level\")>"
   end
 
   it "allows hash access" do
@@ -78,7 +82,7 @@ describe Config::Env::Group do
 
     it "iterates over all keys and values" do
       result = subject.to_enum.map do |k, v|
-        [k, v]
+        [k.to_sym, v]
       end
       expected = [
         [:name, "ok"],
@@ -86,22 +90,6 @@ describe Config::Env::Group do
         [:other, nil]
       ]
       result.sort.must_equal expected.sort
-    end
-  end
-
-  describe "#to_hash" do
-
-    it "returns the group's data" do
-      subject.to_hash.must_equal(
-        name: "ok",
-        value: 123,
-        other: nil
-      )
-    end
-
-    it "returns a copy of the data" do
-      subject.to_hash[:name] = "foo"
-      subject[:name].must_equal "ok"
     end
   end
 end
