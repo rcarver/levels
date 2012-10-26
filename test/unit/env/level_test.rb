@@ -52,7 +52,7 @@ describe Config::Env::Level do
       subject.set_group(:test1, key: 123)
       subject.set_group(:test2, key: 123)
       result = subject.to_enum.map do |k, v|
-        [k.to_sym, v.class]
+        [k, v.class]
       end
       expected = [
         [:test1, Enumerator],

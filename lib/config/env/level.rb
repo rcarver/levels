@@ -25,7 +25,7 @@ module Config
       # Returns a Config::Env::Group.
       # Raises Config::Env::UnknownGroup if the group is not defined.
       def [](group_name)
-        @groups[group_name] or raise UnknownGroup, "#{group_name} group is not defined"
+        @groups[group_name] or raise UnknownGroup, "#{group_name.inspect} group is not defined"
       end
 
       # Public: Determine if a group has been defined.
@@ -56,7 +56,7 @@ module Config
       def to_enum
         Enumerator.new do |y|
           @groups.each do |name, group|
-            y << [name, group.to_enum]
+            y << [name.to_sym, group.to_enum]
           end
         end
       end
