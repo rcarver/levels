@@ -47,13 +47,46 @@ module Config
               if key =~ /^#{prefix}_(.+)$/
                 attr_name = $1.downcase.to_sym
                 if group_data.key?(attr_name)
-                  # TODO: typecast the value based on the value in the template level.
-                  env_data[attr_name] = value
+                  cast_value = typecast(key, value, group_data[attr_name])
+                  env_data[attr_name] = cast_value
                 end
               end
             end
             if env_data.any?
               level.set_group(group_name, env_data)
+            end
+          end
+        end
+
+      protected
+
+        def typecast(key, value, template_value)
+          if value == ""
+            return nil
+          end
+          if template_value.nil?
+            case @env_hash["#{key}_TYPE"]
+            when "string" then value
+            when "integer" then value.to_i
+            when "float" then value.to_f
+            when "boolean" then value.match(/^(true)$/i) != nil
+            when "array"
+              value.split(":").map do |v|
+                typecast("#{key}_TYPE", v, nil)
+              end
+            else value
+            end
+          else
+            case template_value
+            when String then value
+            when Integer then value.to_i
+            when Float then value.to_f
+            when TrueClass, FalseClass then value.match(/^(true)$/i) != nil
+            when Array
+              value.split(":").map do |v|
+                typecast(key, v, template_value.first)
+              end
+            else value
             end
           end
         end

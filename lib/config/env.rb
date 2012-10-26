@@ -49,6 +49,20 @@ module Config
     def self.event_handler
       @event_handler || Config::Env::NullEventHandler.new
     end
+
+    def self.read_json(level_name, json_string)
+      level = Config::Env::Level.new(level_name)
+      input = Config::Env::Input::JSON.new(json_string)
+      input.read(level)
+      level
+    end
+
+    def self.read_system(level_name, template, prefix, env_hash = ENV)
+      level = Config::Env::Level.new(level_name)
+      input = Config::Env::Input::System.new(template, prefix, env_hash)
+      input.read(level)
+      level
+    end
   end
 end
 
