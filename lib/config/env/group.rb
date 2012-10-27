@@ -55,7 +55,7 @@ module Config
       def to_enum
         Enumerator.new do |y|
           @key_values.each do |key, value|
-            y << [key, self[key]]
+            y << [key.to_sym, self[key]]
           end
         end
       end

@@ -79,7 +79,7 @@ describe Config::Env::Group do
 
     it "iterates over all keys and values" do
       result = subject.to_enum.map do |k, v|
-        [k.to_sym, v]
+        [k, v]
       end
       expected = [
         [:name, "ok"],
