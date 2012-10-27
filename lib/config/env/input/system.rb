@@ -29,25 +29,26 @@ module Config
         # prefix   - String prefix for the keys (default: no
         #            prefix).
         #
-        def initialize(template, prefix = nil, env_hash = ENV)
+        def initialize(template, system_typecaster = nil, env_hash = ENV)
           @template = template
-          @prefix = prefix
           @env_hash = env_hash
+          @system_typecaster = system_typecaster || Config::Env::SystemTypecaster.new
         end
 
         def read(level)
           @template.each do |group_name, group|
             env_data = {}
             group_data = {}
-            prefix = "#{@prefix}#{group_name}".upcase
             group.each do |key, value|
               group_data[key.to_sym] = value
             end
             @env_hash.each do |key, value|
-              if key =~ /^#{prefix}_(.+)$/
+              match_key = @system_typecaster.key(group_name.to_s, "(.+)")
+              matcher = Regexp.new("^#{match_key}$")
+              if key =~ matcher
                 attr_name = $1.downcase.to_sym
                 if group_data.key?(attr_name)
-                  cast_value = typecast(key, value, group_data[attr_name])
+                  cast_value = @system_typecaster.parse_input(@env_hash, key, value, group_data[attr_name])
                   env_data[attr_name] = cast_value
                 end
               end
@@ -57,40 +58,6 @@ module Config
             end
           end
         end
-
-      protected
-
-        def typecast(key, value, template_value)
-          if value == ""
-            return nil
-          end
-          if template_value.nil?
-            case @env_hash["#{key}_TYPE"]
-            when "string" then value
-            when "integer" then value.to_i
-            when "float" then value.to_f
-            when "boolean" then value.match(/^(true)$/i) != nil
-            when "array"
-              value.split(":").map do |v|
-                typecast("#{key}_TYPE", v, nil)
-              end
-            else value
-            end
-          else
-            case template_value
-            when String then value
-            when Integer then value.to_i
-            when Float then value.to_f
-            when TrueClass, FalseClass then value.match(/^(true)$/i) != nil
-            when Array
-              value.split(":").map do |v|
-                typecast(key, v, template_value.first)
-              end
-            else value
-            end
-          end
-        end
-
       end
     end
   end

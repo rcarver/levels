@@ -11,6 +11,7 @@ require "config/env/key_values"
 require "config/env/level"
 require "config/env/merged"
 require "config/env/merged_group"
+require "config/env/system_typecaster"
 
 require "config/env/input/json"
 require "config/env/input/system"
@@ -58,8 +59,10 @@ module Config
     end
 
     def self.read_system(level_name, template, prefix, env_hash = ENV)
+      key_formatter = Config::Env::SystemTypecaster::SystemKeyFormatter.new(prefix)
+      system_typecaster = Config::Env::SystemTypecaster.new(key_formatter)
       level = Config::Env::Level.new(level_name)
-      input = Config::Env::Input::System.new(template, prefix, env_hash)
+      input = Config::Env::Input::System.new(template, system_typecaster, env_hash)
       input.read(level)
       level
     end
