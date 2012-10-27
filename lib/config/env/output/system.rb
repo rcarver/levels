@@ -3,32 +3,21 @@ module Config
     module Output
       class System
 
-        def initialize(prefix = nil)
-          @prefix = prefix
+        def initialize(system_typecaster = nil)
+          @system_typecaster = system_typecaster || Config::Env::SystemTypecaster.new
         end
 
         def generate(enumerator)
-          vars = []
-          enumerator.each do |group_name, group|
-            group.each do |key, value|
-              vars.concat vars_for(group_name, key, value)
+          flat_enum = Enumerator.new do |y|
+            enumerator.each do |group_name, group|
+              group.each do |key, value|
+                y << [group_name, key, value]
+              end
             end
           end
-          vars.map { |var| "export #{var}" }.join("\n")
+          vars = @system_typecaster.form_output(flat_enum)
+          vars.map { |k, v| "export #{k}=\"#{v}\"" }.join("\n")
         end
-
-      protected
-
-        def vars_for(group_name, key, value)
-          parts = []
-          parts << @prefix.chomp("_") if @prefix
-          parts << group_name.to_s.upcase
-          parts << key.to_s.upcase
-          left = parts.join("_")
-          right = "\"#{value}\""
-          ["#{left}=#{right}"]
-        end
-
       end
     end
   end

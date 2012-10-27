@@ -66,6 +66,18 @@ module Config
       input.read(level)
       level
     end
+
+    def self.write_json(level, json_opts = nil)
+      output = Config::Env::Output::JSON.new(json_opts)
+      output.generate(level.to_enum)
+    end
+
+    def self.write_system(level, prefix = nil)
+      key_formatter = Config::Env::SystemTypecaster::SystemKeyFormatter.new(prefix)
+      system_typecaster = Config::Env::SystemTypecaster.new(key_formatter)
+      output = Config::Env::Output::System.new(system_typecaster)
+      output.generate(level.to_enum)
+    end
   end
 end
 

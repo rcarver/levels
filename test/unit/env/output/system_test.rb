@@ -5,18 +5,17 @@ describe Config::Env::Output::System do
   let(:data) {
     {
       group1: {
-        key1: "string",
-        key2: 123
+        key: "hello",
       },
-      #group2: {
-        #key: [1, 2, 3]
-      #}
+      group2: {
+        key: "world"
+      }
     }
   }
 
-  let(:prefix) { nil }
+  let(:system_typecaster) { Config::Env::SystemTypecaster.new }
 
-  subject { Config::Env::Output::System.new(prefix) }
+  subject { Config::Env::Output::System.new(system_typecaster) }
 
   def result
     subject.generate(data.to_enum)
@@ -24,21 +23,11 @@ describe Config::Env::Output::System do
 
   it "converts to environment vars" do
     result.must_equal <<-STR.chomp
-export GROUP1_KEY1="string"
-export GROUP1_KEY2="123"
+export GROUP1_KEY="hello"
+export GROUP1_KEY_TYPE="string"
+export GROUP2_KEY="world"
+export GROUP2_KEY_TYPE="string"
     STR
-  end
-
-  describe "initialized with a prefix" do
-
-    let(:prefix) { "PFX_" }
-
-    it "uses the prefix" do
-      result.must_equal <<-STR.chomp
-export PFX_GROUP1_KEY1="string"
-export PFX_GROUP1_KEY2="123"
-      STR
-    end
   end
 end
 
