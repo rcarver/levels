@@ -6,9 +6,10 @@ Levels is a tool for reaading and writing configuration data. A level is
 a set of key/value pairs containing configuration data. Multiple levels
 may be *merged* in a predictable, useful way.
 
-  q. KRAMER: *I'm completely changing the configuration of the apartment.
+  > **KRAMER:** *I'm completely changing the configuration of the apartment.
   You're not gonna believe it when you see it. A whole new lifestyle.*
-  JERRY: *What are you doing?* KRAMER: *Levels.*
+  **JERRY:** *What are you doing?* 
+  **KRAMER:** *Levels.*
 
 ## Creating a level
 
