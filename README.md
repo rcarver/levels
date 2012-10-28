@@ -1,5 +1,7 @@
 # Levels
 
+[![Build Status](https://secure.travis-ci.org/rcarver/config-env.png)](http://travis-ci.org/rcarver/config-env)
+
 Levels is a tool for reaading and writing configuration data. A level is
 a set of key/value pairs containing configuration data. Multiple levels
 may be *merged* in a predictable, useful way.
