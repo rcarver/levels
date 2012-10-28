@@ -1,5 +1,7 @@
 # Config::Env
 
+[![Build Status](https://secure.travis-ci.org/rcarver/config-env.png)](http://travis-ci.org/rcarver/config-env)
+
 Env is a tool for managing configuration. It allows for multiple levels
 of configuration to be merged in a predictable, useful way.
 Configuration data may be stored in a variety of formats. Those values
