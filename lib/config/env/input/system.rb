@@ -29,10 +29,11 @@ module Config
         # prefix   - String prefix for the keys (default: no
         #            prefix).
         #
-        def initialize(template, system_typecaster = nil, env_hash = ENV)
+        def initialize(template, key_formatter = nil, env_hash = ENV)
           @template = template
           @env_hash = env_hash
-          @system_typecaster = system_typecaster || Config::Env::SystemTypecaster.new
+          @key_formatter = key_formatter || Config::Env::System::KeyFormatter.new
+          @key_parser = Config::Env::System::KeyParser.new(@key_formatter)
         end
 
         def read(level)
@@ -43,12 +44,12 @@ module Config
               group_data[key.to_sym] = value
             end
             @env_hash.each do |key, value|
-              match_key = @system_typecaster.key(group_name.to_s, "(.+)")
+              match_key = @key_formatter.create(group_name, "(.+)")
               matcher = Regexp.new("^#{match_key}$")
               if key =~ matcher
                 attr_name = $1.downcase.to_sym
                 if group_data.key?(attr_name)
-                  cast_value = @system_typecaster.parse_input(@env_hash, key, value, group_data[attr_name])
+                  cast_value = @key_parser.parse(@env_hash, key, group_data[attr_name])
                   env_data[attr_name] = cast_value
                 end
               end

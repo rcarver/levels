@@ -3,8 +3,9 @@ module Config
     module Output
       class System
 
-        def initialize(system_typecaster = nil)
-          @system_typecaster = system_typecaster || Config::Env::SystemTypecaster.new
+        def initialize(key_formatter = nil)
+          @key_formatter = key_formatter || Config::Env::System::KeyFormatter.new
+          @key_generator = Config::Env::System::KeyGenerator.new(key_formatter)
         end
 
         def generate(enumerator)
@@ -15,8 +16,14 @@ module Config
               end
             end
           end
-          vars = @system_typecaster.form_output(flat_enum)
-          vars.map { |k, v| "export #{k}=\"#{v}\"" }.join("\n")
+          vars = @key_generator.generate(flat_enum)
+          vars.map { |k, v| "export #{k}=#{quote v}" }.join("\n")
+        end
+
+      protected
+
+        def quote(value)
+          %("#{value}")
         end
       end
     end

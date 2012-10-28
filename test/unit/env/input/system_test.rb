@@ -3,10 +3,10 @@ require 'helper'
 describe Config::Env::Input::System do
 
   let(:template) { {} }
-  let(:system_typecaster) { nil }
+  let(:key_formatter) { nil }
   let(:env_hash) { {} }
 
-  subject { Config::Env::Input::System.new(template.to_enum, system_typecaster, env_hash) }
+  subject { Config::Env::Input::System.new(template.to_enum, key_formatter, env_hash) }
 
   def assert_level_equals_hash(hash)
     level = Config::Env::Level.new("Test")
@@ -17,8 +17,7 @@ describe Config::Env::Input::System do
   [nil, "MY_"].each do |prefix|
     describe "finding data in the System with #{prefix || 'no'} prefix" do
 
-      let(:system_key_formatter) { Config::Env::SystemTypecaster::SystemKeyFormatter.new(prefix) }
-      let(:system_typecaster) { Config::Env::SystemTypecaster.new(system_key_formatter) }
+      let(:key_formatter) { Config::Env::System::KeyFormatter.new(prefix) }
 
       before do
         template[:sample] = { hello: "world" }.to_enum

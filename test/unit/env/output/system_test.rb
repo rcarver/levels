@@ -13,9 +13,7 @@ describe Config::Env::Output::System do
     }
   }
 
-  let(:system_typecaster) { Config::Env::SystemTypecaster.new }
-
-  subject { Config::Env::Output::System.new(system_typecaster) }
+  subject { Config::Env::Output::System.new }
 
   def result
     subject.generate(data.to_enum)

@@ -11,13 +11,17 @@ require "config/env/key_values"
 require "config/env/level"
 require "config/env/merged"
 require "config/env/merged_group"
-require "config/env/system_typecaster"
 
 require "config/env/input/json"
 require "config/env/input/system"
 
 require "config/env/output/json"
 require "config/env/output/system"
+
+require "config/env/system/constants"
+require "config/env/system/key_formatter"
+require "config/env/system/key_generator"
+require "config/env/system/key_parser"
 
 module Config
   # The Config::Env is a collection key/value pairs organized into groups.
@@ -59,10 +63,9 @@ module Config
     end
 
     def self.read_system(level_name, template, prefix, env_hash = ENV)
-      key_formatter = Config::Env::SystemTypecaster::SystemKeyFormatter.new(prefix)
-      system_typecaster = Config::Env::SystemTypecaster.new(key_formatter)
+      key_formatter = Config::Env::System::KeyFormatter.new(prefix)
       level = Config::Env::Level.new(level_name)
-      input = Config::Env::Input::System.new(template, system_typecaster, env_hash)
+      input = Config::Env::Input::System.new(template, key_formatter, env_hash)
       input.read(level)
       level
     end
@@ -73,9 +76,8 @@ module Config
     end
 
     def self.write_system(level, prefix = nil)
-      key_formatter = Config::Env::SystemTypecaster::SystemKeyFormatter.new(prefix)
-      system_typecaster = Config::Env::SystemTypecaster.new(key_formatter)
-      output = Config::Env::Output::System.new(system_typecaster)
+      key_formatter = Config::Env::System::KeyFormatter.new(prefix)
+      output = Config::Env::Output::System.new(key_formatter)
       output.generate(level.to_enum)
     end
   end
