@@ -1,20 +1,18 @@
-# Config::Env
+# Levels
 
-Env is a tool for managing configuration. It allows for multiple levels
-of configuration to be merged in a predictable, useful way.
-Configuration data may be stored in a variety of formats. Those values
-are normalized and resolved by Env, then prepared for output or use by
-an application.
+Levels is a tool for reaading and writing configuration data. A level is
+a set of key/value pairs containing configuration data. Multiple levels
+may be *merged* in a predictable, useful way.
 
-## Creating a configuration
+  q. KRAMER: *I'm completely changing the configuration of the apartment.
+  You're not gonna believe it when you see it. A whole new lifestyle.*
+  JERRY: *What are you doing?* KRAMER: *Levels.*
 
-Env configurations are made up of Groups and Levels.
+## Creating a level
 
-### Groups
-
-An Env configuration is organized into Groups. Each group is a set of
-key/value pairs. To describe a very simple web application made up of a
-server and a task queue, you could write this (in JSON).
+Each level of configuration is made up of one or more groups. Each group
+is a set of key/value pairs. To describe a very simple web application
+made up of a server and a task queue, you could write this (in JSON).
 
 ```json
 {
@@ -28,26 +26,11 @@ server and a task queue, you could write this (in JSON).
 }
 ```
 
-### Levels
-
-Extending the example above, you can add additional levels of
-configuration. Consider having a common "base" configuration, with
+Now consider having a common "base" configuration, with
 slight differences in development and production. Our base
 configuration defines the possible keys, with default values.
 
-```json
-{
-  "server": {
-    "hostname": "localhost"
-  },
-  "task_queue": {
-    "workers": 1,
-    "queues": ["high", "low"]
-  }
-}
-```
-
-A production configuration can override the relevant values.
+A "production" level could override the relevant values like this.
 
 ```json
 {
@@ -60,161 +43,167 @@ A production configuration can override the relevant values.
 }
 ```
 
-The system's environment is another Level. To alter a value at runtime,
-follow a convention to set the appropriate environment variable.
+The system's environment is another level. To alter any value at
+runtime, follow a convention to set the appropriate environment
+variable.
 
 ```bash
 TASK_QUEUE_WORKERS="10"
 ```
 
-Env will find the variable `TASK_QUEUE_WORKERS` and automatically
-typecast the value based on the existing configuration, or
-[typecasting](#typecasting) rules may be used.
+### Writing a configuration
 
-### Ruby Syntax
+Levels may be written in several formats.
 
-JSON and ENV variables are useful, but the most flexible format is Ruby.
-Env provides a simple DSL for writing groups.
+  * **RUBY** is the most common and powerful for hand written configs.
+  * **JSON** is convenient for machine generated configs.
+  * **Environment Variables** are useful for local or runtime
+    configuration. This syntax may not be used for the "base" level.
+
+#### Data Types
+
+Levels has a limited understanding of data types by design. The guiding
+principles for this are:
+
+  * It must be possible to represent any value in an environment
+    variable.
+  * Use only types that are native in JSON.
+
+Therefore, Levels only supports the following types:
+
+  * String
+  * Integer
+  * Float
+  * Boolean
+  * Array
+
+Notice that JSON's Object is not supported. This is because groups are
+objects, so key/values pairs are already available. As well, it's
+difficult to represent key/value pairs in an environment variable.
+
+Fortunately, these simple types are perfectly adequate for the purposes
+of system configuration.
+
+#### Ruby Syntax
+
+The Ruby DSL is a clean, simple format. It aims to be very readable and
+writable. It is also extensible.
+
+The format looks like this:
 
 ```ruby
-configure :server,
-  hostname: "example.com"
+set :server,
+    hostname: "example.com"
 
-configure :task_queue,
-  workers: 5,
-  queues: ["high", "low"]
+set :task_queue,
+    workers: 5,
+    queues: ["high", "low"]
 ```
 
-Ruby has the advantage of computed values. A contrived example:
+The Ruby syntax supports **computed values**.
 
 ```ruby
 configure :task_queue,
   queues: -> { [server.hostname, "high", "low"] }
 ```
 
-Computed values can be used to implement things like encrypted secrets.
+#### JSON Syntax
 
-```ruby
-configure :secrets,
-  key: "..."
+JSON syntax is straightforward. Because the datatypes supported by
+Levels are the same as supported by JSON, there's nothing else you need
+to know.
 
-configure :aws,
-  secret_key: -> { Secrets.decrypt("...", secrets.key) }
+```json
+{
+  "server": {
+    hostname: "example.com"
+  },
+  "task_queue": {
+    "workers": 5,
+    "queues": ["high", "low"]
+  }
+}
 ```
 
-The DSL can be extended to make this cleaner.
+#### Environment Variables syntax
 
-```ruby
-# Extend Config::Env::Runtime with new functions.
-module Config::Env::Runtime
-  def secret(value)
-    -> { Secrets.decrypt(value, secrets.key) }
-  end
-end
+The environment variables syntax has rules for defining keys and values.
 
-configure :aws,
-  secret_key: secret("...")
-```
+The format of each key is `[PREFIX]<GROUP>_<KEY>`.
 
-## Reading a configuration
+  * `PREFIX` is an optional prefix for all keys.
+  * `GROUP` is the name of the group in all caps.
+  * `KEY` is the name of the key in all caps.
+  * `GROUP` and `KEY` are separated by an underscore (`_`).
 
-Once a configuration has been defined, Env can read it. Again, there are
-several options for reading. Consider this simple configuration for the
-following examples.
-
-```ruby
-configure :server,
-  hostname: "example.com"
-
-configure :task_queue,
-  workers: 5,
-  queues: ["high", "low"]
-```
-
-### Environment Variables
-
-The simplest way to read a configuration is to write it to environment
-variables. The configuration above results in this shell script. Note
-that all values have been converted to string, and typecast information
-is included. See [typecasting](#typecasting).
+The example looks like this (without a prefix).
 
 ```sh
-export SERVER_HOSTNAME="example.com"
-export SERVER_HOSTNAME_TYPE="string"
-
-export TASK_QUEUE_WORKERS="5"
-export TASK_QUEUE_WORKERS_TYPE="int"
-
-export TASK_QUEUE_QUEUES="high:low"
-export TASK_QUEUE_QUEUES_TYPE="array"
-export TASK_QUEUE_QUEUES_DELIMETER=":"
+SERVER_HOSTNAME="example.com"
+TASK_QUEUE_WORKERS="5"
+TASK_QUEUE_QUEUES="high:low"
 ```
 
-### Ruby
+##### Typecasting
 
-Within a Ruby runtime, Env provides a simple syntax for reading.
+You'll notice that `TASK_QUEUE_WORKERS` should be an integer, and
+`TASK_QUEUE_QUEUES` should be an array. Levels will typecast each value
+based on the key's type in the "base" level. Or, you may define each
+value's type.
 
-```ruby
-# Dot syntax.
-env.server.hostname        # => "example.com"
-env.task_queue.workers     # => 5
-env.task_queue.queues      # => ["high", "low"]
-
-# Hash syntax.
-env[:server][:hostname]    # => "example.com"
-env[:task_queue][:workers] # => 5
-env[:task_queue][:queues]  # => ["high", "low"]
-```
-
-An attempt to read an unknown group or key will throw an exception.
-
-```ruby
-env.some_group        # raises Config::Env::UnknownGroup
-env.server.some_value # raises Config::Env::UnknownKey
-```
-
-Env can find out if a group or key exists.
-
-```ruby
-env.defined?(:other)           # => false
-env.defined?(:server)          # => true
-env.server.defined?(:other)    # => false
-env.server.defined?(:hostname) # => true
-```
-
-## Typecasting
-
-In several examples, we've seen environment variables contain non-string
-data. The following typecasting rules are used when using the system
-environment as Level in a configuration, as well as when exporting a
-configuration to environment variables.
-
-```sh
-# A configuration value has this form.
-[PREFIX]<GROUP>_<KEY>
-
-# The type of that value can be set here.
-[PREFIX]<GROUP>_<KEY>_TYPE
-
-# The type may require more information for conversion, in which case
-# additional keys may be used.
-[PREFIX]<GROUP>_<KEY>_<OTHER>
-```
-
-Env supports the following types:
+To set the type of a value, set `<GROUP>_<KEY>_TYPE` to one of the
+following values:
 
   * `string` - The value is taken as is.
-  * `int` - The value is converted to an integer via Ruby's `to_i`.
-  * `array` - The value is split using `_DELIMETER` or colon (`:`). The
+  * `integer` - The value is converted to an integer via Ruby's `to_i`.
+  * `float` - The value is converted to a float via Ruby's `to_f`.
+  * `boolean` - The value is `true` if it's "true" or "1", else `false`.
+  * `array` - The value is split using `_DELIMITER` or colon (`:`). The
     values of the resulting array may be typecast using `_TYPE_TYPE`.
 
-## Usage
+Any value may be set to Ruby's `nil` (`NULL`) by setting it to an empty
+string.
 
-From the command line Env can generate environment variables or JSON.
+Some examples:
 
 ```sh
-config-env \
-  --format json \
+SAMPLE_MY_NULL=""
+
+SAMPLE_MY_INT="123"
+SAMPLE_MY_INT_TYPE="integer"
+
+SAMPLE_MY_BOOL="true"
+SAMPLE_MY_BOOL_TYPE="boolean"
+
+SAMPLE_MY_STRING_ARRAY="a:b:c"
+SAMPLE_MY_STRING_ARRAY_TYPE="array"
+
+SAMPLE_MY_INT_ARRAY="1:2:3"
+SAMPLE_MY_INT_ARRAY_TYPE="array"
+SAMPLE_MY_INT_ARRAY_TYPE_TYPE="integer"
+
+SAMPLE_MY_CSV_ARRAY="one,two,three"
+SAMPLE_MY_CSV_ARRAY_TYPE="array"
+SAMPLE_MY_CSV_ARRAY_DELIMITER=","
+```
+
+## Using a configuration
+
+Once a configuration has been written, Levels can read and merge it.
+Once merged, you can use it at runtime in a Ruby process, or output it
+as JSON or Environment Variables.
+
+In any case, any number of levels, including the system environment, may
+be merged. The system environment is typically merged last, but it's not
+required.
+
+**From the command line**, Levels can generate environment variables or
+JSON. The generated configuration is written to STDOUT. Both JSON and
+Environment Variables look exactly like the input formats above.
+
+```sh
+levels \
+  --output json \
   --level "Base" \
   --level "Prod" \
   --system \
@@ -222,21 +211,47 @@ config-env \
   prod.json
 ```
 
-Within a Ruby program, Env is an object.
+**Within a Ruby program**, Levels is an object.
 
 ```ruby
-# Specify the inputs.
-setup = Config::Env.setup
-setup.level "Base", "base.rb"
-setup.level "Prod", "prod.json"
-setup.system
+# Specify the inputs levels.
+levels = Levels.setup
+levels.add "Base", "base.rb"
+levels.add "Prod", "prod.json"
+levels.add_system
 # Get a merged configuration.
-my_env = setup.merge
+config = levels.merge
 ```
 
-In either case, any number of levels, including the system environment,
-may be merged. The system environment is typically merged last, but it's
-not required.
+The resulting `config` object above works like this.
+
+```ruby
+# Dot syntax.
+config.server.hostname        # => "example.com"
+config.task_queue.workers     # => 5
+config.task_queue.queues      # => ["high", "low"]
+
+# Hash syntax.
+config[:server][:hostname]    # => "example.com"
+config[:task_queue][:workers] # => 5
+config[:task_queue][:queues]  # => ["high", "low"]
+```
+
+An attempt to read an unknown group or key will throw an exception.
+
+```ruby
+config.some_group        # raises Levels::UnknownGroup
+config.server.some_value # raises Levels::UnknownKey
+```
+
+You can find out if a group or key exists.
+
+```ruby
+config.defined?(:other)           # => false
+config.defined?(:server)          # => true
+config.server.defined?(:other)    # => false
+config.server.defined?(:hostname) # => true
+```
 
 ## Author
 
