@@ -2,13 +2,13 @@
 
 [![Build Status](https://secure.travis-ci.org/rcarver/levels.png)](http://travis-ci.org/rcarver/levels)
 
-Levels is a tool for reaading and writing configuration data. A level is
+Levels is a tool for reading and writing configuration data. A level is
 a set of key/value pairs containing configuration data. Multiple levels
-may be *merged* in a predictable, useful way.
+may be merged in a predictable, useful way.
 
   > **KRAMER:** *I'm completely changing the configuration of the apartment.
   You're not gonna believe it when you see it. A whole new lifestyle.*
-  **JERRY:** *What are you doing?* 
+  **JERRY:** *What are you doing?*
   **KRAMER:** *Levels.*
 
 ## Creating a level
@@ -74,11 +74,12 @@ principles for this are:
 
 Therefore, Levels only supports the following types:
 
-  * String
-  * Integer
-  * Float
-  * Boolean
-  * Array
+  * string (Ruby `String`)
+  * integer (Ruby `Fixnum`)
+  * float (Ruby `Float`)
+  * boolean (Ruby `TrueClass` or `FalseClass`)
+  * array (Ruby `Array`)
+  * null (Ruby `Nil`)
 
 Notice that JSON's Object is not supported. This is because groups are
 objects, so key/values pairs are already available. As well, it's
@@ -119,7 +120,7 @@ to know.
 ```json
 {
   "server": {
-    hostname: "example.com"
+    "hostname": "example.com"
   },
   "task_queue": {
     "workers": 5,
@@ -164,7 +165,7 @@ following values:
   * `array` - The value is split using `_DELIMITER` or colon (`:`). The
     values of the resulting array may be typecast using `_TYPE_TYPE`.
 
-Any value may be set to Ruby's `nil` (`NULL`) by setting it to an empty
+Any value may be set to Ruby's `nil` (`Null`) by setting it to an empty
 string.
 
 Some examples:
