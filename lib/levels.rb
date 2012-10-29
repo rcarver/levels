@@ -13,6 +13,7 @@ require "levels/merged"
 require "levels/merged_group"
 
 require "levels/input/json"
+require "levels/input/ruby"
 require "levels/input/system"
 
 require "levels/output/json"
