@@ -1,27 +1,27 @@
 require "json"
 
-require "config/env/version"
+require "levels/version"
 
-require "config/env/method_missing"
+require "levels/method_missing"
 
-require "config/env/event_handler"
-require "config/env/group"
-require "config/env/key"
-require "config/env/key_values"
-require "config/env/level"
-require "config/env/merged"
-require "config/env/merged_group"
+require "levels/event_handler"
+require "levels/group"
+require "levels/key"
+require "levels/key_values"
+require "levels/level"
+require "levels/merged"
+require "levels/merged_group"
 
-require "config/env/input/json"
-require "config/env/input/system"
+require "levels/input/json"
+require "levels/input/system"
 
-require "config/env/output/json"
-require "config/env/output/system"
+require "levels/output/json"
+require "levels/output/system"
 
-require "config/env/system/constants"
-require "config/env/system/key_formatter"
-require "config/env/system/key_generator"
-require "config/env/system/key_parser"
+require "levels/system/constants"
+require "levels/system/key_formatter"
+require "levels/system/key_generator"
+require "levels/system/key_parser"
 
 module Config
   # The Config::Env is a collection key/value pairs organized into groups.

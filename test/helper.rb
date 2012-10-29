@@ -1,6 +1,6 @@
 require 'minitest/spec'
 require 'fivemat/minitest/autorun'
 
-require 'config-env'
+require 'levels'
 
 require 'support/acceptance_spec'
