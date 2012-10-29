@@ -74,12 +74,12 @@ principles for this are:
 
 Therefore, Levels only supports the following types:
 
-  * string (Ruby `String`)
-  * integer (Ruby `Fixnum`)
-  * float (Ruby `Float`)
-  * boolean (Ruby `TrueClass` or `FalseClass`)
-  * array (Ruby `Array`)
-  * null (Ruby `Nil`)
+  * **string** (Ruby `String`)
+  * **integer** (Ruby `Fixnum`)
+  * **float** (Ruby `Float`)
+  * **boolean** (Ruby `TrueClass` or `FalseClass`)
+  * **array** (Ruby `Array`) of values, which are also typed.
+  * **null** (Ruby `NilClass`)
 
 Notice that JSON's Object is not supported. This is because groups are
 objects, so key/values pairs are already available. As well, it's
