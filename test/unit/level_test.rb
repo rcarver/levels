@@ -1,32 +1,32 @@
 require 'helper'
 
-describe Config::Env::Level do
+describe Levels::Level do
 
-  subject { Config::Env::Level.new("test") }
+  subject { Levels::Level.new("test") }
 
   specify "#_level_name" do
     subject._level_name.must_equal "test"
   end
 
   specify "#to_s" do
-    subject.to_s.must_equal "<Config::Env::Level \"test\">"
+    subject.to_s.must_equal "<Levels::Level \"test\">"
   end
 
   it "allows groups to be defined and accessed" do
     subject.set_group(:test, key: 123)
-    subject.test.must_be_instance_of Config::Env::Group
-    subject[:test].must_be_instance_of Config::Env::Group
+    subject.test.must_be_instance_of Levels::Group
+    subject[:test].must_be_instance_of Levels::Group
   end
 
   it "handls a string group name" do
     subject.set_group("test", key: 123)
-    subject.test.must_be_instance_of Config::Env::Group
-    subject[:test].must_be_instance_of Config::Env::Group
+    subject.test.must_be_instance_of Levels::Group
+    subject[:test].must_be_instance_of Levels::Group
   end
 
   it "raises an error if you access an unknown group" do
-    proc { subject.nothing }.must_raise Config::Env::UnknownGroup
-    proc { subject[:nothing] }.must_raise Config::Env::UnknownGroup
+    proc { subject.nothing }.must_raise Levels::UnknownGroup
+    proc { subject[:nothing] }.must_raise Levels::UnknownGroup
   end
 
   it "allows the existence of a group to be tested" do
@@ -39,7 +39,7 @@ describe Config::Env::Level do
 
   it "does not allow a group to be redefined" do
     subject.set_group(:test, key: 123)
-    proc { subject.set_group(:test, key: 123) }.must_raise Config::Env::DuplicateGroup
+    proc { subject.set_group(:test, key: 123) }.must_raise Levels::DuplicateGroup
   end
 
   describe "#to_enum" do

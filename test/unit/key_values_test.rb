@@ -1,10 +1,10 @@
 require 'helper'
 
-describe Config::Env::KeyValues do
+describe Levels::KeyValues do
 
   let(:data) { nil }
 
-  subject { Config::Env::KeyValues.new(data) }
+  subject { Levels::KeyValues.new(data) }
 
   describe "in general" do
 
@@ -29,13 +29,13 @@ describe Config::Env::KeyValues do
 
       it "returns a Key and the value" do
         key, value = subject.pair(:a)
-        key.must_equal Config::Env::Key.new(:a)
+        key.must_equal Levels::Key.new(:a)
         value.must_equal 1
       end
 
       it "returns a Key and nil if the key does not exist" do
         key, value = subject.pair(:b)
-        key.must_equal Config::Env::Key.new(:b)
+        key.must_equal Levels::Key.new(:b)
         value.must_equal nil
       end
     end
@@ -74,7 +74,7 @@ describe Config::Env::KeyValues do
     end
 
     specify "#inspect" do
-      subject.inspect.must_equal "<Config::Env::KeyValues>"
+      subject.inspect.must_equal "<Levels::KeyValues>"
     end
 
     specify "#to_s" do
@@ -84,9 +84,9 @@ describe Config::Env::KeyValues do
 
   describe "comparisons" do
 
-    let(:a) { Config::Env::KeyValues.new(a: 1) }
-    let(:b) { Config::Env::KeyValues.new(a: 1) }
-    let(:c) { Config::Env::KeyValues.new(b: 1) }
+    let(:a) { Levels::KeyValues.new(a: 1) }
+    let(:b) { Levels::KeyValues.new(a: 1) }
+    let(:c) { Levels::KeyValues.new(b: 1) }
 
     specify "equality" do
       (a == b).must_equal true

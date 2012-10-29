@@ -1,11 +1,11 @@
 require 'helper'
 
-describe Config::Env::System::KeyFormatter do
+describe Levels::System::KeyFormatter do
 
   let(:prefix) { nil }
   let(:joiner) { nil }
 
-  subject { Config::Env::System::KeyFormatter.new(prefix, joiner) }
+  subject { Levels::System::KeyFormatter.new(prefix, joiner) }
 
   describe "without a prefix" do
 

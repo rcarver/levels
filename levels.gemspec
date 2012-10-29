@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "config-env"
   gem.require_paths = ["lib"]
-  gem.version       = Config::Env::VERSION
+  gem.version       = Levels::VERSION
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "minitest", "~>2.0"

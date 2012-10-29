@@ -1,8 +1,8 @@
 require 'helper'
 
-describe Config::Env::System::KeyGenerator do
+describe Levels::System::KeyGenerator do
 
-  subject { Config::Env::System::KeyGenerator.new }
+  subject { Levels::System::KeyGenerator.new }
 
   it "generates key/values for the data and typecasting" do
     enum = [

@@ -1,6 +1,6 @@
 require 'helper'
 
-describe Config::Env::Output::JSON do
+describe Levels::Output::JSON do
 
   let(:data) {
     {
@@ -16,7 +16,7 @@ describe Config::Env::Output::JSON do
 
   let(:json_opts) { nil }
 
-  subject { Config::Env::Output::JSON.new(json_opts) }
+  subject { Levels::Output::JSON.new(json_opts) }
 
   def result
     subject.generate(data.to_enum)

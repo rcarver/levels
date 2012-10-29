@@ -1,11 +1,11 @@
 require 'helper'
 
-describe Config::Env::Group do
+describe Levels::Group do
 
   let(:hash) { {} }
   let(:value_transformer) { nil }
 
-  subject { Config::Env::Group.new("fake level", :test, hash, value_transformer) }
+  subject { Levels::Group.new("fake level", :test, hash, value_transformer) }
 
   before do
     hash[:name] = "ok"
@@ -18,7 +18,7 @@ describe Config::Env::Group do
   end
 
   specify "#to_s" do
-    subject.to_s.must_equal "<Config::Env::Group test (\"fake level\")>"
+    subject.to_s.must_equal "<Levels::Group test (\"fake level\")>"
   end
 
   it "allows hash access" do
@@ -34,8 +34,8 @@ describe Config::Env::Group do
   end
 
   it "raises an error if you access a nonexistent key" do
-    proc { subject[:foo] }.must_raise Config::Env::UnknownKey
-    proc { subject.foo }.must_raise Config::Env::UnknownKey
+    proc { subject[:foo] }.must_raise Levels::UnknownKey
+    proc { subject.foo }.must_raise Levels::UnknownKey
   end
 
   it "allows the existence of a key to be tested" do

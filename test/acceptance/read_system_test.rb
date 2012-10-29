@@ -5,7 +5,7 @@ describe "acceptance: read system" do
   describe "using typecast information" do
 
     let(:template) {
-      level = Config::Env::Level.new("template level")
+      level = Levels::Level.new("template level")
       level.set_group(:types,
         string: nil,
         integer: nil,
@@ -43,7 +43,7 @@ describe "acceptance: read system" do
       }
     }
 
-    subject { Config::Env.read_system("the system", template.to_enum, nil, env) }
+    subject { Levels.read_system("the system", template.to_enum, nil, env) }
 
     assert_sample_data_set
   end
@@ -51,7 +51,7 @@ describe "acceptance: read system" do
   describe "using the template's types" do
 
     let(:template) {
-      level = Config::Env::Level.new("template level")
+      level = Levels::Level.new("template level")
       level.set_group(:types,
         string: "!hello",
         integer: 0123,
@@ -82,7 +82,7 @@ describe "acceptance: read system" do
       }
     }
 
-    subject { Config::Env.read_system("the system", template.to_enum, nil, env) }
+    subject { Levels.read_system("the system", template.to_enum, nil, env) }
 
     assert_sample_data_set
   end
@@ -90,7 +90,7 @@ describe "acceptance: read system" do
   describe "using a prefix" do
 
     let(:template) {
-      level = Config::Env::Level.new("template level")
+      level = Levels::Level.new("template level")
       level.set_group(:group,
         message: "hello there"
       )
@@ -103,7 +103,7 @@ describe "acceptance: read system" do
       }
     }
 
-    subject { Config::Env.read_system("the system", template.to_enum, "PREFIX_", env) }
+    subject { Levels.read_system("the system", template.to_enum, "PREFIX_", env) }
 
     it "finds values" do
       subject.group.message.must_equal "hello world"

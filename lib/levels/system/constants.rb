@@ -1,11 +1,8 @@
-module Config
-  module Env
-    module System
+module Levels
+  module System
 
-      TYPE_SUFFIX = "TYPE"
-      ARRAY_DELIMITER_SUFFIX = "DELIMITER"
+    TYPE_SUFFIX = "TYPE"
+    ARRAY_DELIMITER_SUFFIX = "DELIMITER"
 
-    end
   end
 end
-

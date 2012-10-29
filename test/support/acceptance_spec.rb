@@ -6,7 +6,7 @@ class AcceptanceSpec < MiniTest::Spec
 
   def self.let_standard_level(name = :level)
     let(name) {
-      level = Config::Env::Level.new("standard level")
+      level = Levels::Level.new("standard level")
       level.set_group(:types,
         string: "hello",
         integer: 123,

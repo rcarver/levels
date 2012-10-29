@@ -4,7 +4,7 @@ describe "acceptance: write json" do
 
   let_standard_level
 
-  subject { Config::Env.write_json(level) }
+  subject { Levels.write_json(level) }
 
   it "converts to JSON" do
     subject.must_equal <<-JSON.chomp

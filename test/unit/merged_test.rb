@@ -1,11 +1,11 @@
 require 'helper'
 
-describe Config::Env::Merged do
+describe Levels::Merged do
 
-  let(:level1) { Config::Env::Level.new("l1") }
-  let(:level2) { Config::Env::Level.new("l2") }
+  let(:level1) { Levels::Level.new("l1") }
+  let(:level2) { Levels::Level.new("l2") }
 
-  subject { Config::Env::Merged.new([level1, level2]) }
+  subject { Levels::Merged.new([level1, level2]) }
 
   before do
     level1.set_group(:g1, a: 1)
@@ -15,12 +15,12 @@ describe Config::Env::Merged do
   end
 
   specify "#to_s" do
-    subject.to_s.must_equal "<Config::Env::Merged l1, l2>"
+    subject.to_s.must_equal "<Levels::Merged l1, l2>"
   end
 
   it "allows groups to be retrieved" do
-    subject.g1.must_be_instance_of Config::Env::MergedGroup
-    subject[:g1].must_be_instance_of Config::Env::MergedGroup
+    subject.g1.must_be_instance_of Levels::MergedGroup
+    subject[:g1].must_be_instance_of Levels::MergedGroup
   end
 
   it "initializes the merged group with the right levels" do
@@ -32,8 +32,8 @@ describe Config::Env::Merged do
   end
 
   it "raises an error if you access an unknown group" do
-    proc { subject.nothing }.must_raise Config::Env::UnknownGroup
-    proc { subject[:nothing] }.must_raise Config::Env::UnknownGroup
+    proc { subject.nothing }.must_raise Levels::UnknownGroup
+    proc { subject[:nothing] }.must_raise Levels::UnknownGroup
   end
 
   it "allows the existence of a group to be tested" do

@@ -1,8 +1,8 @@
 require 'helper'
 
-describe Config::Env::System::KeyParser do
+describe Levels::System::KeyParser do
 
-  subject { Config::Env::System::KeyParser.new }
+  subject { Levels::System::KeyParser.new }
 
   describe "basic parsing rules" do
 

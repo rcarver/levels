@@ -4,7 +4,7 @@ describe "acceptance: write system" do
 
   let_standard_level
 
-  subject { Config::Env.write_system(level) }
+  subject { Levels.write_system(level) }
 
   it "converts to ENV variables" do
     subject.must_equal <<-ENV.chomp

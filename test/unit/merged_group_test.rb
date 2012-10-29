@@ -1,11 +1,11 @@
 require 'helper'
 
-describe Config::Env::MergedGroup do
+describe Levels::MergedGroup do
 
-  let(:group1) { Config::Env::Group.new("g1", :test, a: 1, b: 2) }
-  let(:group2) { Config::Env::Group.new("g2", :test, a: 9, c: 3) }
+  let(:group1) { Levels::Group.new("g1", :test, a: 1, b: 2) }
+  let(:group2) { Levels::Group.new("g2", :test, a: 9, c: 3) }
 
-  subject { Config::Env::MergedGroup.new(:test, [group1, group2]) }
+  subject { Levels::MergedGroup.new(:test, [group1, group2]) }
 
   it "allows hash access to any key" do
     subject[:a].must_equal 9
@@ -66,7 +66,7 @@ describe Config::Env::MergedGroup do
     end
 
     it "does not notify a bad key" do
-      proc { subject.foo }.must_raise Config::Env::UnknownKey
+      proc { subject.foo }.must_raise Levels::UnknownKey
     end
   end
 

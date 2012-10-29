@@ -1,6 +1,6 @@
 require 'helper'
 
-describe Config::Env::Input::JSON do
+describe Levels::Input::JSON do
 
   let(:json_string) {
     <<-STR
@@ -16,10 +16,10 @@ describe Config::Env::Input::JSON do
     STR
   }
 
-  subject { Config::Env::Input::JSON.new(json_string) }
+  subject { Levels::Input::JSON.new(json_string) }
 
   def assert_level_equals_hash(hash)
-    level = Config::Env::Level.new("Test")
+    level = Levels::Level.new("Test")
     subject.read(level)
     level.eql_hash?(hash).must_equal true
   end

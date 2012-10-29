@@ -22,7 +22,7 @@ describe "acceptance: read json" do
     JSON
   }
 
-  subject { Config::Env.read_json("the json", json) }
+  subject { Levels.read_json("the json", json) }
 
   assert_sample_data_set
 end

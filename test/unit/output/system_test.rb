@@ -1,6 +1,6 @@
 require 'helper'
 
-describe Config::Env::Output::System do
+describe Levels::Output::System do
 
   let(:data) {
     {
@@ -13,7 +13,7 @@ describe Config::Env::Output::System do
     }
   }
 
-  subject { Config::Env::Output::System.new }
+  subject { Levels::Output::System.new }
 
   def result
     subject.generate(data.to_enum)

@@ -1,13 +1,13 @@
 require 'helper'
 
-describe Config::Env do
+describe Levels do
 
   specify ".new" do
-    Config::Env.new.must_be_instance_of Config::Env::Level
+    Levels.new.must_be_instance_of Levels::Level
   end
 
   specify ".merge" do
-    Config::Env.merge([]).must_be_instance_of Config::Env::Merged
+    Levels.merge([]).must_be_instance_of Levels::Merged
   end
 end
 

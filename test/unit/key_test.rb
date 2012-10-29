@@ -1,17 +1,17 @@
 require 'helper'
 
-describe Config::Env::Key do
+describe Levels::Key do
 
   let(:input) { "settings" }
 
-  subject { Config::Env::Key.new(input) }
+  subject { Levels::Key.new(input) }
 
   specify "#to_sym" do
     subject.to_sym.must_equal :settings
   end
 
   specify "#inspect" do
-    subject.inspect.must_equal "<Config::Env::Key :settings>"
+    subject.inspect.must_equal "<Levels::Key :settings>"
   end
 
   specify "#to_s" do
@@ -20,9 +20,9 @@ describe Config::Env::Key do
 
   describe "comparisons" do
 
-    let(:a) { Config::Env::Key.new(:a) }
-    let(:b) { Config::Env::Key.new(:a) }
-    let(:c) { Config::Env::Key.new(:b) }
+    let(:a) { Levels::Key.new(:a) }
+    let(:b) { Levels::Key.new(:a) }
+    let(:c) { Levels::Key.new(:b) }
 
     specify "equality" do
       (a == b).must_equal true
