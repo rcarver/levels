@@ -174,7 +174,8 @@ Add level "System Environment"
 Read sample.message
   Skip "hello" from First Level
   Use  "goodbye" from System Environment
-Read more.number => 123 from Second Level
+Read more.number
+  Use  123 from Second Level
       STR
       stdout.must_equal <<-STR
 {

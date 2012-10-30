@@ -28,18 +28,15 @@ module Levels
 
     def on_read_from_merged_group(group_name, key, levels)
       final_level_name, final_value = levels.last
+      skipped_levels = levels[0..-2]
 
-      if levels.size == 1
-        @stream.puts "Read #{group_name}.#{key} => #{final_value.inspect} from #{final_level_name}"
-      else
-        skipped_levels = levels[0..-2]
+      @stream.puts "Read #{group_name}.#{key}"
 
-        @stream.puts "Read #{group_name}.#{key}"
-        skipped_levels.each do |level_name, value|
-          @stream.puts "  Skip #{value.inspect} from #{level_name}"
-        end
-        @stream.puts "  Use  #{final_value.inspect} from #{final_level_name}"
+      skipped_levels.each do |level_name, value|
+        @stream.puts "  Skip #{value.inspect} from #{level_name}"
       end
+
+      @stream.puts "  Use  #{final_value.inspect} from #{final_level_name}"
     end
   end
 
