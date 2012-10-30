@@ -53,6 +53,13 @@ module Levels
     @event_handler || Levels::NullEventHandler.new
   end
 
+  def self.read_ruby(level_name, ruby_string, file, line = 1)
+    level = Levels::Level.new(level_name)
+    input = Levels::Input::Ruby.new(ruby_string, file, line)
+    input.read(level)
+    level
+  end
+
   def self.read_json(level_name, json_string)
     level = Levels::Level.new(level_name)
     input = Levels::Input::JSON.new(json_string)
