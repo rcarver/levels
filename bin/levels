@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+
+require 'levels'
+require 'optparse'
+require 'pathname'
+
+# By default we'll output JSON
+@output = true
+@output_format = "json"
+
+# If output is "system", change the prefix.
+@system_output_prefix = nil
+
+# Read input from the system.
+@system = false
+@system_input_prefix = nil
+
+# Accumulate the names of levels for file arguments.
+@level_names = []
+
+OptionParser.new do |opts|
+
+  opts.banner = "Usage: levels [options] [files]"
+
+  opts.on("-l", "--level [NAME]", "Name the level from a file.") do |n|
+    @level_names << n
+  end
+
+  opts.on("-s", "--system [PREFIX]", "Read the system as a level.") do |p|
+    @system = true
+    @system_input_prefix = p
+  end
+
+  opts.on("-o", "--output FORMAT", "The format to output. (json, system)") do |o|
+    @output_format = o
+  end
+
+  opts.on("-p", "--prefix PREFIX", "Prefix for system output.") do |p|
+    @system_output_prefix = p
+  end
+
+  opts.on("-n", "--no-output", "Don't output the result.") do
+    @output = false
+  end
+
+  opts.on("-v", "--version", "Show the levels version.") do
+    STDOUT.puts "Levels #{Levels::VERSION}"
+  end
+
+  opts.on("-h", "--help", "Show this help.") do
+    STDOUT.puts opts.to_s
+  end
+
+end.parse!
+
+# Files are any remaining arguments after parsing.
+@files = ARGV.dup
+
+# Files are converted to levels.
+@levels = []
+
+# Read each file into a level.
+@files.each.with_index do |file, index|
+  pn = Pathname.new(file)
+
+  level_name = @level_names[index] || pn.basename.to_s
+  STDERR.puts "Add level #{level_name.inspect} from #{pn.basename}"
+
+  case pn.extname
+  when ".rb" then
+    @levels << Levels.read_ruby(level_name, pn.read, pn.to_s)
+  when ".json" then
+    @levels << Levels.read_json(level_name, pn.read)
+  end
+end
+
+# Read the system using the existing levels as a base, then add it
+# as another level.
+if @system
+  merged = Levels.merge(*@levels)
+  level_name = "System Environment"
+  STDERR.puts "Add level #{level_name.inspect}"
+  @levels << Levels.read_system(level_name, merged.to_enum, @system_input_prefix, ENV)
+end
+
+# Write the merged configuration to stdout.
+if @output && @levels.any?
+  Levels.event_handler = Levels::CliEventHandler.new(STDERR)
+
+  merged = Levels.merge(*@levels)
+
+  case @output_format
+  when "json"
+    STDOUT.puts Levels.write_json(merged)
+  when "system"
+    STDOUT.puts Levels.write_system(merged, @system_output_prefix)
+  end
+end

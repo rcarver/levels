@@ -10,4 +10,5 @@ guard 'minitest' do
     ]
   }
   watch(%r|^test/helper\.rb|)     { "test" }
+  watch(%r|^bin/|) { "test/bin" }
 end
