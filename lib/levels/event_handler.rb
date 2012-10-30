@@ -38,12 +38,11 @@ module Levels
       else
         skipped_levels = levels[0..-2]
 
-        @log << @log.colorize("Read #{@name}.#{key}", @base_color)
+        @log << @log.colorize("Read #{group_name}.#{key}", @base_color)
         @log.indent do
           skipped_levels.each do |level_name, value|
             @log << @log.colorize("Skip #{value.inspect} from #{level_name}", @alt_color)
           end
-          final_level_name, final_value = final_group
           @log << @log.colorize("Use  #{final_value.inspect} from #{final_level_name}", @base_color)
         end
       end
