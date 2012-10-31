@@ -9,6 +9,7 @@ module Levels
     #
     def initialize(levels)
       @levels = levels
+      @lazy_evaluator = LazyEvaluator.new(self)
     end
 
     # See Levels::Level#[].
@@ -17,7 +18,7 @@ module Levels
       raise UnknownGroup if levels.empty?
 
       groups = levels.map { |level| level[group_name] }
-      Levels::MergedGroup.new(group_name, groups)
+      Levels::MergedGroup.new(group_name, groups, @lazy_evaluator)
     end
 
     # See Levels::Level#defined?.

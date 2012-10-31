@@ -5,7 +5,9 @@ describe Levels::MergedGroup do
   let(:group1) { Levels::Group.new("g1", :test, a: 1, b: 2) }
   let(:group2) { Levels::Group.new("g2", :test, a: 9, c: 3) }
 
-  subject { Levels::MergedGroup.new(:test, [group1, group2]) }
+  let(:lazy_evaluator) { nil }
+
+  subject { Levels::MergedGroup.new(:test, [group1, group2], lazy_evaluator) }
 
   it "allows hash access to any key" do
     subject[:a].must_equal 9
@@ -17,6 +19,16 @@ describe Levels::MergedGroup do
     subject.a.must_equal 9
     subject.b.must_equal 2
     subject.c.must_equal 3
+  end
+
+  describe "with a lazy evaluator" do
+
+    let(:lazy_evaluator) { -> value { value + 100 } }
+
+    it "passes it through" do
+      subject.a.must_equal 109
+      subject[:a].must_equal 109
+    end
   end
 
   describe "outputs" do

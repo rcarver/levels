@@ -9,10 +9,11 @@ module Levels
     # name   - Symbol the group name.
     # groups - Array of Levels::Group.
     #
-    def initialize(name, groups)
+    def initialize(name, groups, lazy_evaluator = nil)
       @name = name
       @groups = groups
       @event_handler = Levels.event_handler
+      @lazy_evaluator = lazy_evaluator || -> value { value }
     end
 
     # See Levels::Group#[].
@@ -28,7 +29,7 @@ module Levels
       )
 
       # Return the value.
-      groups.last[key]
+      @lazy_evaluator.call groups.last[key]
     end
 
     # See Levels::Group#defined?

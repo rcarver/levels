@@ -45,6 +45,11 @@ describe Levels::Merged do
     subject.foo?.must_equal false
   end
 
+  it "allows lazy evaluation" do
+    level2.set_group(:g3, sum: -> { g1.a + g2.b })
+    subject.g3.sum.must_equal 11
+  end
+
   describe "#to_enum" do
 
     it "returns an Enumerator" do
