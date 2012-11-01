@@ -21,15 +21,18 @@ module Levels
       groups = @groups.find_all { |group| group.defined?(key) }
       raise UnknownKey if groups.empty?
 
-      # Notify that a key was read.
+      names  = groups.map { |g| g._level_name }
+      values = groups.map { |g| @lazy_evaluator.call(g[key]) }
+
+      # Notify that a key was read, and all of the values.
       @event_handler.on_read_from_merged_group(
         @name,
         key,
-        groups.map { |g| [g._level_name, g[key]] }
+        names.zip(values)
       )
 
-      # Return the value.
-      @lazy_evaluator.call groups.last[key]
+      # Return the last value.
+      values.last
     end
 
     # See Levels::Group#defined?

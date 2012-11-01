@@ -72,13 +72,30 @@ describe Levels::MergedGroup do
         [
           ["g1", 1],
           ["g2", 9]
-        ],
+        ]
       ])
       subject.a
     end
 
     it "does not notify a bad key" do
       proc { subject.foo }.must_raise Levels::UnknownKey
+    end
+
+    describe "with a lazy evaluator" do
+
+      let(:lazy_evaluator) { -> value { value + 100 } }
+
+      it "notifies the evaluated value" do
+        event_handler.expect(:on_read_from_merged_group, nil, [
+          :test,
+          :a,
+          [
+            ["g1", 101],
+            ["g2", 109]
+          ]
+        ])
+        subject.a
+      end
     end
   end
 
