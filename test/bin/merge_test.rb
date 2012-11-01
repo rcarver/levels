@@ -91,7 +91,7 @@ export FOO_SAMPLE_MESSAGE_TYPE="string"
     it "merges with the base" do
       w("one.rb", ruby_syntax)
       set_env merged_system_keys
-      assert_success "levels --system -- #{f 'one.rb'}"
+      assert_success "levels --system #{f 'one.rb'}"
       stdout.must_equal merged_json_syntax
     end
 

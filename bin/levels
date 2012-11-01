@@ -4,6 +4,27 @@ require 'levels'
 require 'optparse'
 require 'pathname'
 
+# If "--system" is the last flag, and no PREFIX is set, then
+# the first file argument will be interpreted as the PREFIX.
+#
+# Examples
+#
+#   # This would be interpreted as "one.rb is the system prefix".
+#   --level One --system one.rb
+#   # What we want is
+#   --level One --system '' one.rb
+#
+def fix_system_is_last_arg(argv)
+  index = ARGV.index("--system") or return
+  value = argv[index + 1] or return
+
+  unless value =~ /^-/ || value =~ /^[A-Z_]/
+    ARGV.insert(index + 1, "")
+  end
+end
+
+fix_system_is_last_arg(ARGV)
+
 # By default we'll output JSON
 @output = true
 @output_format = "json"
@@ -28,7 +49,7 @@ OptionParser.new do |opts|
 
   opts.on("-s", "--system [PREFIX]", "Read the system as a level.") do |p|
     @system = true
-    @system_input_prefix = p
+    @system_input_prefix = p if p && !p.empty?
   end
 
   opts.on("-o", "--output FORMAT", "The format to output. (json, system)") do |o|
