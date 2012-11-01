@@ -100,7 +100,11 @@ end
 if @system
   merged = Levels.merge(*@levels)
   level_name = "System Environment"
-  STDERR.puts "Add level #{level_name.inspect}"
+  if @system_input_prefix
+    STDERR.puts "Add level #{level_name.inspect} with prefix #{@system_input_prefix}"
+  else
+    STDERR.puts "Add level #{level_name.inspect}"
+  end
   @levels << Levels.read_system(level_name, merged.to_enum, @system_input_prefix, ENV)
 end
 

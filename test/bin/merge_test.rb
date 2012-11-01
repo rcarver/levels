@@ -162,6 +162,16 @@ Add level "System Environment"
       stdout.must_equal ""
     end
 
+    it "logs when the system is used with a prefix" do
+      w("one.rb", ruby_syntax)
+      assert_success "levels --no-output --system FOO_ --level 'First Level' #{f 'one.rb'}"
+      stderr.must_equal <<-STR
+Add level "First Level" from one.rb
+Add level "System Environment" with prefix FOO_
+      STR
+      stdout.must_equal ""
+    end
+
     it "logs when levels are merged" do
       w("one.rb", ruby_syntax)
       w("two.rb", ruby_syntax_more)
