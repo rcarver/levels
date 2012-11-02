@@ -182,10 +182,10 @@ Add level "First Level" from one.rb
 Add level "Second Level" from two.rb
 Add level "System Environment"
 Read sample.message
-  Skip "hello" from First Level
-  Use  "goodbye" from System Environment
+ - "hello" from First Level
+ + "goodbye" from System Environment
 Read more.number
-  Use  123 from Second Level
+ + 123 from Second Level
       STR
       stdout.must_equal <<-STR
 {

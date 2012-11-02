@@ -33,10 +33,10 @@ module Levels
       @stream.puts "Read #{group_name}.#{key}"
 
       skipped_levels.each do |level_name, value|
-        @stream.puts "  Skip #{value.inspect} from #{level_name}"
+        @stream.puts " - #{value.inspect} from #{level_name}"
       end
 
-      @stream.puts "  Use  #{final_value.inspect} from #{final_level_name}"
+      @stream.puts " + #{final_value.inspect} from #{final_level_name}"
     end
   end
 
