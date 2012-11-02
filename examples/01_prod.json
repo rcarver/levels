@@ -1,0 +1,8 @@
+{
+  "webserver": {
+    "hostname": "example.com"
+  },
+  "task_queue": {
+    "workers": 5
+  }
+}
