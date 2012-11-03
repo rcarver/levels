@@ -7,8 +7,9 @@ module Levels
     #
     # levels - Array of Levels::Level.
     #
-    def initialize(levels)
+    def initialize(levels, event_handler = nil)
       @levels = levels
+      @event_handler = event_handler || NullEventHandler.new
       @lazy_evaluator = LazyEvaluator.new(self)
     end
 
@@ -18,7 +19,7 @@ module Levels
       raise UnknownGroup if levels.empty?
 
       groups = levels.map { |level| level[group_name] }
-      Levels::MergedGroup.new(group_name, groups, @lazy_evaluator)
+      Levels::MergedGroup.new(group_name, groups, @event_handler, @lazy_evaluator)
     end
 
     # See Levels::Level#defined?.
@@ -29,6 +30,9 @@ module Levels
     def to_s
       "<Levels::Merged #{@levels.map { |l| l._level_name }.join(', ')}>"
     end
+
+    # Set the event handler.
+    attr_writer :event_handler
 
     # Returns an Enumerator which yields [gruop_name, Group#to_enum].
     def to_enum

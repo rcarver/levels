@@ -110,9 +110,8 @@ end
 
 # Write the merged configuration to stdout.
 if @output && @levels.any?
-  Levels.event_handler = Levels::CliEventHandler.new(STDERR)
-
   merged = Levels.merge(*@levels)
+  merged.event_handler = Levels::CliEventHandler.new(STDERR)
 
   case @output_format
   when "json"

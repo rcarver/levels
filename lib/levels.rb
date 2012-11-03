@@ -36,22 +36,9 @@ module Levels
   # Error thrown when attempting to read a key that has not been defined.
   UnknownKey = Class.new(StandardError)
 
-  # Internal: Shorthand for creating an env level.
-  def self.new(name = nil)
-    Level.new(name || "[no name]")
-  end
-
   # Internal: Create a merge from one or more env levels.
   def self.merge(*levels)
     Merged.new(levels)
-  end
-
-  def self.event_handler=(event_handler)
-    @event_handler = event_handler
-  end
-
-  def self.event_handler
-    @event_handler || Levels::NullEventHandler.new
   end
 
   def self.read_ruby(level_name, ruby_string, file, line = 1)
