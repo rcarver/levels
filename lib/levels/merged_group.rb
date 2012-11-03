@@ -21,11 +21,23 @@ module Levels
       groups = @groups.find_all { |group| group.defined?(key) }
       raise UnknownKey if groups.empty?
 
-      names  = groups.map { |g| g._level_name }
-      values = groups.map { |g| @lazy_evaluator.call(g[key]) }
+      # Notify that a key is about to be read.
+      @event_handler.on_read(@name, key)
 
-      # Notify that a key was read, and all of the values.
-      @event_handler.on_read_from_merged_group(
+      names = groups.map do |g|
+        g._level_name
+      end
+
+      values = []
+      groups.each do |g|
+        # Notify that a value is being evaluated.
+        @event_handler.on_evaluate(@name, key, g._level_name) do
+          values << @lazy_evaluator.call(g[key])
+        end
+      end
+
+      # Notify the final values.
+      @event_handler.on_values(
         @name,
         key,
         names.zip(values)

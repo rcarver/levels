@@ -3,15 +3,14 @@ module Levels
   # read from a merged group.
   module EventHandler
 
-    # Public: Receive notification that a key was read.
-    #
-    # group_name - Symbol the name of the group.
-    # key        - Symbol the name of the key.
-    # levels     - Array of [level_name, value] for each potential
-    #              level. The last item is the actual level/value used.
-    #
-    # Returns nothing.
-    def on_read_from_merged_group(group_name, key, levels)
+    def on_read(group_name, key)
+    end
+
+    def on_evaluate(group_name, key, level_name)
+      yield
+    end
+
+    def on_values(group_name, key, levels)
     end
   end
 
@@ -24,19 +23,38 @@ module Levels
 
     def initialize(stream)
       @stream = stream
+      @indent = 0
     end
 
-    def on_read_from_merged_group(group_name, key, levels)
+    def on_read(group_name, key)
+      write "> #{group_name}.#{key}"
+    end
+
+    def on_evaluate(group_name, key, level_name)
+      begin
+        @indent += 1
+        yield
+      ensure
+        @indent -= 1
+      end
+    end
+
+    def on_values(group_name, key, levels)
       final_level_name, final_value = levels.last
       skipped_levels = levels[0..-2]
 
-      @stream.puts "Read #{group_name}.#{key}"
-
       skipped_levels.each do |level_name, value|
-        @stream.puts " - #{value.inspect} from #{level_name}"
+        write " - #{value.inspect} from #{level_name}"
       end
 
-      @stream.puts " + #{final_value.inspect} from #{final_level_name}"
+      write " + #{final_value.inspect} from #{final_level_name}"
+    end
+
+  protected
+
+    def write(str)
+      prefix = "  " * @indent
+      @stream.puts prefix + str
     end
   end
 

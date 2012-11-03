@@ -9,8 +9,7 @@ module Levels
     #
     def initialize(levels, event_handler = nil)
       @levels = levels
-      @event_handler = event_handler || NullEventHandler.new
-      @lazy_evaluator = LazyEvaluator.new(self)
+      self.event_handler = event_handler || NullEventHandler.new
     end
 
     # See Levels::Level#[].
@@ -32,7 +31,10 @@ module Levels
     end
 
     # Set the event handler.
-    attr_writer :event_handler
+    def event_handler=(event_handler)
+      @event_handler = event_handler
+      @lazy_evaluator = LazyEvaluator.new(self, event_handler)
+    end
 
     # Returns an Enumerator which yields [gruop_name, Group#to_enum].
     def to_enum

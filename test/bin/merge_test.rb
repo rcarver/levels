@@ -9,13 +9,6 @@ set :sample,
     STR
   end
 
-  let(:ruby_syntax_more) do
-    <<-STR
-set :more,
-    number: 123
-    STR
-  end
-
   let(:json_syntax) do
     <<-STR
 {
@@ -170,33 +163,6 @@ Add level "First Level" from one.rb
 Add level "System Environment" with prefix FOO_
       STR
       stdout.must_equal ""
-    end
-
-    it "logs when levels are merged" do
-      w("one.rb", ruby_syntax)
-      w("two.rb", ruby_syntax_more)
-      set_env merged_system_keys
-      assert_success "levels --system --level 'First Level' --level 'Second Level' #{f 'one.rb'} #{f 'two.rb'}"
-      stderr.must_equal <<-STR
-Add level "First Level" from one.rb
-Add level "Second Level" from two.rb
-Add level "System Environment"
-Read sample.message
- - "hello" from First Level
- + "goodbye" from System Environment
-Read more.number
- + 123 from Second Level
-      STR
-      stdout.must_equal <<-STR
-{
-  "sample": {
-    "message": "goodbye"
-  },
-  "more": {
-    "number": 123
-  }
-}
-      STR
     end
   end
 end

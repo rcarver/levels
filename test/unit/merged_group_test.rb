@@ -36,41 +36,47 @@ describe Levels::MergedGroup do
 
     let(:event_handler) { MiniTest::Mock.new }
 
+    before do
+      # Because minitest's expect doesn't yield, we'll implement on_evaluate on
+      # the mock object, then call to another method that we can set the method
+      # expectation on. So, for any test below, expect on `ex_evaluate` instead
+      # of `on_evaluate`.
+      def event_handler.on_evaluate(group_name, key, level_name)
+        self.ex_evaluate(group_name, key, level_name)
+        yield
+      end
+    end
+
     after do
       event_handler.verify
     end
 
     it "notifies when a single-level, top level variable is used" do
-      event_handler.expect(:on_read_from_merged_group, nil, [
-        :test,
-        :b,
-        [
-          ["g1", 2]
-        ]
-      ])
+      event_handler.expect(:on_read,     nil, [:test, :b])
+      event_handler.expect(:ex_evaluate, nil, [:test, :b, "g1"])
+      event_handler.expect(:on_values,   nil, [:test, :b, [
+        ["g1", 2]
+      ]])
       subject.b
     end
 
     it "notifies when a single-level, lower level variable is used" do
-      event_handler.expect(:on_read_from_merged_group, nil, [
-        :test,
-        :c,
-        [
-          ["g2", 3]
-        ]
-      ])
+      event_handler.expect(:on_read,     nil, [:test, :c])
+      event_handler.expect(:ex_evaluate, nil, [:test, :c, "g2"])
+      event_handler.expect(:on_values,   nil, [:test, :c, [
+        ["g2", 3]
+      ]])
       subject.c
     end
 
     it "notifies when a multi-level variable is used" do
-      event_handler.expect(:on_read_from_merged_group, nil, [
-        :test,
-        :a,
-        [
-          ["g1", 1],
-          ["g2", 9]
-        ]
-      ])
+      event_handler.expect(:on_read,     nil, [:test, :a])
+      event_handler.expect(:ex_evaluate, nil, [:test, :a, "g1"])
+      event_handler.expect(:ex_evaluate, nil, [:test, :a, "g2"])
+      event_handler.expect(:on_values,   nil, [:test, :a, [
+        ["g1", 1],
+        ["g2", 9]
+      ]])
       subject.a
     end
 
@@ -83,14 +89,13 @@ describe Levels::MergedGroup do
       let(:lazy_evaluator) { -> value { value + 100 } }
 
       it "notifies the evaluated value" do
-        event_handler.expect(:on_read_from_merged_group, nil, [
-          :test,
-          :a,
-          [
-            ["g1", 101],
-            ["g2", 109]
-          ]
-        ])
+        event_handler.expect(:on_read,     nil, [:test, :a])
+        event_handler.expect(:ex_evaluate, nil, [:test, :a, "g1"])
+        event_handler.expect(:ex_evaluate, nil, [:test, :a, "g2"])
+        event_handler.expect(:on_values,   nil, [:test, :a, [
+          ["g1", 101],
+          ["g2", 109]
+        ]])
         subject.a
       end
     end
