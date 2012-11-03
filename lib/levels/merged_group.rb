@@ -9,10 +9,10 @@ module Levels
     # name   - Symbol the group name.
     # groups - Array of Levels::Group.
     #
-    def initialize(name, groups, lazy_evaluator = nil)
+    def initialize(name, groups, event_handler = nil, lazy_evaluator = nil)
       @name = name
       @groups = groups
-      @event_handler = Levels.event_handler
+      @event_handler = event_handler || Levels::NullEventHandler.new
       @lazy_evaluator = lazy_evaluator || -> value { value }
     end
 
@@ -58,8 +58,5 @@ module Levels
         end
       end
     end
-
-    # Dependency Injection for testing.
-    attr_writer :event_handler
   end
 end

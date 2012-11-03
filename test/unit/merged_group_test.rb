@@ -5,9 +5,10 @@ describe Levels::MergedGroup do
   let(:group1) { Levels::Group.new("g1", :test, a: 1, b: 2) }
   let(:group2) { Levels::Group.new("g2", :test, a: 9, c: 3) }
 
+  let(:event_handler) { nil }
   let(:lazy_evaluator) { nil }
 
-  subject { Levels::MergedGroup.new(:test, [group1, group2], lazy_evaluator) }
+  subject { Levels::MergedGroup.new(:test, [group1, group2], event_handler, lazy_evaluator) }
 
   it "allows hash access to any key" do
     subject[:a].must_equal 9
@@ -34,10 +35,6 @@ describe Levels::MergedGroup do
   describe "outputs" do
 
     let(:event_handler) { MiniTest::Mock.new }
-
-    before do
-      subject.event_handler = event_handler
-    end
 
     after do
       event_handler.verify
