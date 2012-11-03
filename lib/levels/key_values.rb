@@ -8,13 +8,6 @@ module Levels
       end
     end
 
-    def Value(value)
-      case value
-      when Levels::Value then value
-      else Levels::Value.new(value)
-      end
-    end
-
     include Enumerable
 
     def initialize(data = nil)

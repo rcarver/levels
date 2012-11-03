@@ -1,9 +1,8 @@
 module Levels
   class LazyEvaluator
 
-    def initialize(level, event_handler = nil, key_formatter = nil)
+    def initialize(level, key_formatter = nil)
       @level = level
-      @event_handler = event_handler || Levels::NullEventHandler.new
       @key_formatter = key_formatter || Levels::System::KeyFormatter.new
     end
 
@@ -12,10 +11,8 @@ module Levels
         case value
         #when /\$\{[A-Z_]+\}/
         when Proc
-          #@event_handler.on_loopback do
-            dsl = DSL.new(@level)
-            value = dsl.instance_exec(&value)
-          #end
+          dsl = DSL.new(@level)
+          value = dsl.instance_exec(&value)
         else
           return value
         end

@@ -9,6 +9,7 @@ module Levels
     #
     def initialize(levels, event_handler = nil)
       @levels = levels
+      @lazy_evaluator = LazyEvaluator.new(self)
       self.event_handler = event_handler || NullEventHandler.new
     end
 
@@ -33,7 +34,6 @@ module Levels
     # Set the event handler.
     def event_handler=(event_handler)
       @event_handler = event_handler
-      @lazy_evaluator = LazyEvaluator.new(self, event_handler)
     end
 
     # Returns an Enumerator which yields [gruop_name, Group#to_enum].
