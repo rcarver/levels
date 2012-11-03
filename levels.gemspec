@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = Levels::VERSION
 
   gem.add_development_dependency "rake"
-  gem.add_development_dependency "minitest", "~>2.0"
+  gem.add_development_dependency "minitest", "~>4.0"
 end
