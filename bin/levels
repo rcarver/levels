@@ -29,6 +29,9 @@ fix_system_is_last_arg(ARGV)
 @output = true
 @output_format = "json"
 
+# Colorize by default.
+@colorize = true
+
 # If output is "system", change the prefix.
 @system_output_prefix = nil
 
@@ -62,6 +65,10 @@ OptionParser.new do |opts|
 
   opts.on("-n", "--no-output", "Don't output the result.") do
     @output = false
+  end
+
+  opts.on("--[no-]color", "Colorize the output.") do |bool|
+    @colorize = bool
   end
 
   opts.on("-v", "--version", "Show the levels version.") do
@@ -111,7 +118,7 @@ end
 # Write the merged configuration to stdout.
 if @output && @levels.any?
   merged = Levels.merge(*@levels)
-  merged.event_handler = Levels::CliEventHandler.new(STDERR)
+  merged.event_handler = Levels::CliEventHandler.new(STDERR, @colorize)
 
   case @output_format
   when "json"

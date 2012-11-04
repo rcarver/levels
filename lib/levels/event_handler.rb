@@ -19,15 +19,37 @@ module Levels
     include EventHandler
   end
 
-  class CliEventHandler
+  module Colorizer
 
-    def initialize(stream)
+    RESET =    "\033[0m"
+    FOREGROUND = {
+      black:   "\033[30m",
+      red:     "\033[31m",
+      green:   "\033[32m",
+      brown:   "\033[33m",
+      blue:    "\033[34m",
+      magenta: "\033[35m",
+      cyan:    "\033[36m",
+      white:   "\033[37m"
+    }
+
+    def foreground_color(name, str)
+      code = FOREGROUND[name] or raise ArgumentError, "Unknown color #{name.inspect}"
+      "#{code}#{str}#{RESET}"
+    end
+  end
+
+  class CliEventHandler
+    include Colorizer
+
+    def initialize(stream, color = false)
       @stream = stream
+      @color = color
       @indent = 0
     end
 
     def on_read(group_name, key)
-      write "> #{group_name}.#{key}"
+      write :white, "> #{group_name}.#{key}"
     end
 
     def on_evaluate(group_name, key, level_name)
@@ -44,16 +66,17 @@ module Levels
       skipped_levels = levels[0..-2]
 
       skipped_levels.each do |level_name, value|
-        write " - #{value.inspect} from #{level_name}"
+        write :red, " - #{value.inspect} from #{level_name}"
       end
 
-      write " + #{final_value.inspect} from #{final_level_name}"
+      write :green, " + #{final_value.inspect} from #{final_level_name}"
     end
 
   protected
 
-    def write(str)
+    def write(color, str)
       prefix = "  " * @indent
+      str = foreground_color(color, str) if @color
       @stream.puts prefix + str
     end
   end
