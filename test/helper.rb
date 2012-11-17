@@ -6,5 +6,6 @@ require 'minitest/autorun'
 
 require 'levels'
 
+require 'support/base_spec'
 require 'support/acceptance_spec'
 require 'support/bin_spec'
