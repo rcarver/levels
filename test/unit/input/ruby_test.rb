@@ -10,8 +10,8 @@ describe Levels::Input::Ruby do
 
     let(:ruby_string) {
       <<-RUBY
-set :foo,
-  value: "ok"
+group :foo
+  set value: "ok"
       RUBY
     }
 
@@ -29,8 +29,8 @@ set :foo,
 
     let(:ruby_string) {
       <<-RUBY
-xset :foo,
-  value: "ok"
+xgroup :foo
+  set value: "ok"
       RUBY
     }
 
@@ -39,7 +39,7 @@ xset :foo,
         subject.read(level)
       rescue => e
         e.class.must_equal NoMethodError
-        e.message.must_equal %(undefined method `xset' for <Levels>:Levels::Input::Ruby::DSL)
+        e.message.must_equal %(undefined method `xgroup' for <Levels>:Levels::Input::Ruby::DSL)
         e.backtrace.first.must_equal "file.rb:1:in `read'"
       end
     end

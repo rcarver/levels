@@ -6,17 +6,18 @@ describe "acceptance: read ruby" do
 
     let(:ruby) {
       <<-RUBY
-set :types,
-    string: "hello",
-    integer: 123,
-    float: 1.5,
-    boolean_true: true,
-    boolean_false: false,
-    array_of_string: ["a", "b", "c"],
-    array_of_integer: [1, 2, 3],
-    null: nil
-set :group2,
-    message: "hello world"
+group "types"
+  set string: "hello"
+  set integer: 123
+  set float: 1.5
+  set boolean_true: true
+  set boolean_false: false
+  set array_of_string: ["a", "b", "c"]
+  set array_of_integer: [1, 2, 3]
+  set null: nil
+
+group "group2"
+  set message: "hello world"
       RUBY
     }
 
@@ -29,17 +30,17 @@ set :group2,
 
     let(:level1_ruby) {
       <<-RUBY
-set :names,
-    full_name: -> { [names.first_name, names.last_name].join(" ") },
-    first_name: "John",
-    last_name: "Doe"
+group :names
+  set full_name: -> { [names.first_name, names.last_name].join(" ") }
+  set first_name: "John"
+  set last_name: "Doe"
       RUBY
     }
 
     let(:level2_ruby) {
       <<-RUBY
-set :names,
-    last_name: "Smith"
+group "names"
+  set last_name: "Smith"
       RUBY
     }
 

@@ -12,6 +12,7 @@ module Levels
       def read(level)
         dsl = DSL.new(level)
         dsl.instance_eval(@ruby_string, @file, @line)
+        dsl.close_current_group
       end
 
       class DSL
@@ -20,14 +21,23 @@ module Levels
           @level = level
         end
 
-        # Public: Set configuration variables.
-        #
-        # name - Symbol name of the group.
-        # hash - Hash of Symbol keys and any values.
-        #
-        # Returns nothing.
-        def set(name, hash)
-          @level.set_group(name, hash)
+        def group(name)
+          close_current_group
+          @group = name
+          @hash = {}
+        end
+
+        def set(hash)
+          return if @hash.nil?
+          @hash.update(hash)
+        end
+
+        def close_current_group
+          if @group && @hash
+            @level.set_group(@group, @hash)
+          end
+          @group = nil
+          @hash = nil
         end
 
         def to_s

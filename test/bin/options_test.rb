@@ -6,8 +6,8 @@ describe "bin: options" do
 
     before do
       w("one.rb", <<-RUBY)
-set :sample,
-  message: "hello"
+group :sample
+  set message: "hello"
       RUBY
     end
 

@@ -1,6 +1,6 @@
-set :webserver,
-  hostname: "localhost"
+group :webserver
+  set hostname: "localhost"
 
-set :task_queue,
-  workers: 1,
-  queues: -> { ["high", "low", webserver.hostname] }
+group :task_queue
+  set workers: 1
+  set queues: -> { ["high", "low", webserver.hostname] }

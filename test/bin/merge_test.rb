@@ -4,8 +4,8 @@ describe "bin: merge" do
 
   let(:ruby_syntax) do
     <<-STR
-set :sample,
-    message: "hello"
+group :sample
+  set message: "hello"
     STR
   end
 

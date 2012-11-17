@@ -5,15 +5,15 @@ describe "acceptance: the cli event handler" do
   it "handles lazy evaluation" do
 
     level1 = Levels.read_ruby("One", <<-RUBY, "file.rb")
-set :names,
-    full_name: -> { [names.first_name, names.last_name].join(" ") },
-    first_name: "John",
-    last_name: "Doe"
+group :names
+  set full_name: -> { [names.first_name, names.last_name].join(" ") }
+  set first_name: "John"
+  set last_name: "Doe"
     RUBY
 
     level2 = Levels.read_ruby("Two", <<-RUBY, "file.rb")
-set :names,
-    last_name: "Smith"
+group :names
+  set last_name: "Smith"
     RUBY
 
     stream = StringIO.new
