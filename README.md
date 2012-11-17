@@ -91,25 +91,25 @@ of system configuration.
 
 #### Ruby Syntax
 
-The Ruby DSL is a clean, simple format. It aims to be very readable and
-writable. It is also extensible.
+The Ruby DSL is a clean, simple format. It aims to be readable, writable and
+editable. It is also extensible.
 
 The format looks like this:
 
 ```ruby
-set :server,
-    hostname: "example.com"
+group :server
+  set hostname: "example.com"
 
-set :task_queue,
-    workers: 5,
-    queues: ["high", "low"]
+group :task_queue
+  set workers: 5
+  set queues: ["high", "low"]
 ```
 
 The Ruby syntax supports **computed values**.
 
 ```ruby
-configure :task_queue,
-  queues: -> { [server.hostname, "high", "low"] }
+group :task_queue
+  set queues: -> { [server.hostname, "high", "low"] }
 ```
 
 #### JSON Syntax
