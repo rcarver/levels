@@ -61,6 +61,7 @@ Levels may be written in several formats.
 
   * **RUBY** is the most common and powerful for hand written configs.
   * **JSON** is convenient for machine generated configs.
+  * **YAML** is good for both hand written and machine generated configs.
   * **Environment Variables** are useful for local or runtime
     configuration. This syntax may not be used for the "base" level.
 
@@ -128,6 +129,21 @@ to know.
     "queues": ["high", "low"]
   }
 }
+```
+
+#### YAML Syntax
+
+YAML syntax is also exactly as you would expect.
+
+```yaml
+---
+server:
+  hostname: example.com
+task_queue:
+  workers: 5
+  queues: 
+  - high
+  - low
 ```
 
 #### Environment Variables syntax
