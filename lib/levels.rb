@@ -56,6 +56,13 @@ module Levels
     level
   end
 
+  def self.read_yaml(level_name, yaml_string)
+    level = Levels::Level.new(level_name)
+    input = Levels::Input::YAML.new(yaml_string)
+    input.read(level)
+    level
+  end
+
   def self.read_system(level_name, template, prefix, env_hash = ENV)
     key_formatter = Levels::System::KeyFormatter.new(prefix)
     level = Levels::Level.new(level_name)
