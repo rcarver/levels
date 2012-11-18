@@ -78,6 +78,11 @@ module Levels
     output.generate(level.to_enum)
   end
 
+  def self.write_yaml(level)
+    output = Levels::Output::YAML.new
+    output.generate(level.to_enum)
+  end
+
   def self.write_system(level, prefix = nil)
     key_formatter = Levels::System::KeyFormatter.new(prefix)
     output = Levels::Output::System.new(key_formatter)
