@@ -1,6 +1,7 @@
 require 'tmpdir'
 
 class BinSpec < MiniTest::Spec
+  include TempfileHelper
 
   register_spec_type(self) do |desc|
     desc =~ /^bin:/
