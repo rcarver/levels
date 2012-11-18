@@ -19,6 +19,14 @@ group :sample
     STR
   end
 
+  let(:yaml_syntax) do
+    <<-STR
+---
+sample:
+  message: hello
+    STR
+  end
+
   let(:system_syntax) do
     <<-STR
 export SAMPLE_MESSAGE="hello"
@@ -71,6 +79,18 @@ export FOO_SAMPLE_MESSAGE_TYPE="string"
       stdout.must_equal json_syntax
     end
 
+    it "reads a yaml file" do
+      w("one.yaml", yaml_syntax)
+      assert_success "levels #{f 'one.yaml'}"
+      stdout.must_equal json_syntax
+    end
+
+    it "reads a yml file" do
+      w("one.yml", yaml_syntax)
+      assert_success "levels #{f 'one.yml'}"
+      stdout.must_equal json_syntax
+    end
+
     it "merges files" do
       w("one.rb", ruby_syntax)
       w("one.json", merged_json_syntax)
@@ -102,6 +122,12 @@ export FOO_SAMPLE_MESSAGE_TYPE="string"
       w("one.rb", ruby_syntax)
       assert_success "levels --output json #{f 'one.rb'}"
       stdout.must_equal json_syntax
+    end
+
+    it "writes yaml" do
+      w("one.rb", ruby_syntax)
+      assert_success "levels --output yaml #{f 'one.rb'}"
+      stdout.must_equal yaml_syntax
     end
 
     it "writes system" do

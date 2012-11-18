@@ -99,6 +99,8 @@ end.parse!
     @levels << Levels.read_ruby(level_name, pn.read, pn.to_s)
   when ".json" then
     @levels << Levels.read_json(level_name, pn.read)
+  when ".yaml", ".yml" then
+    @levels << Levels.read_yaml(level_name, pn.read)
   end
 end
 
@@ -123,6 +125,8 @@ if @output && @levels.any?
   case @output_format
   when "json"
     STDOUT.puts Levels.write_json(merged)
+  when "yaml"
+    STDOUT.puts Levels.write_yaml(merged)
   when "system"
     STDOUT.puts Levels.write_system(merged, @system_output_prefix)
   end
