@@ -1,4 +1,5 @@
 require "json"
+require "yaml"
 
 require "levels/version"
 
@@ -20,6 +21,7 @@ require "levels/input/yaml"
 
 require "levels/output/json"
 require "levels/output/system"
+require "levels/output/yaml"
 
 require "levels/system/constants"
 require "levels/system/key_formatter"

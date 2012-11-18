@@ -4,14 +4,15 @@ describe Levels::Input::YAML do
 
   let(:yaml_string) {
     <<-STR
+---
 group1:
   key1: string
   key2: 123
 group2:
   key: 
-    - 1
-    - 2
-    - 3
+  - 1
+  - 2
+  - 3
     STR
   }
 

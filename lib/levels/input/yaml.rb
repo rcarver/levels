@@ -1,5 +1,3 @@
-require 'yaml'
-
 module Levels
   module Input
     class YAML
