@@ -2,8 +2,8 @@
 #
 # This example sets up three levels:
 #
-#   * "Base" from examples/base.rb
-#   * "Prod" from examples/prod.json
+#   * "Base" from examples/01_base.rb
+#   * "Prod" from examples/01_prod.json
 #   * "System Environment" with no prefix.
 #
 # Base defines the possible keys with default vaules, Prod changes a few of
