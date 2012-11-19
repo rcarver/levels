@@ -2,8 +2,8 @@ require 'helper'
 require 'tempfile'
 
 describe Levels::Runtime do
-  
-  let(:klass) { 
+
+  let(:klass) {
     Class.new do
       include Levels::Runtime
     end

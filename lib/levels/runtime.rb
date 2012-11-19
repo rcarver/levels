@@ -10,7 +10,7 @@ module Levels
     #
     # file_path - String path to the file. The path may be absolute,
     #             or relative to the Ruby file calling this function.
-    #           
+    #
     # Returns a Proc that reads the file when called.
     # That proc raises Levels::Ruby::FileNotFoundError if the file does
     #   not exist.

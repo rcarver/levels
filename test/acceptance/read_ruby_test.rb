@@ -60,7 +60,7 @@ group "names"
     let(:ruby_file) { f("file.rb") }
 
     def read_ruby_with_file_path_path(path)
-      Levels.merge Levels.read_ruby("the ruby", <<-RUBY, ruby_file.to_s) 
+      Levels.merge Levels.read_ruby("the ruby", <<-RUBY, ruby_file.to_s)
 group "group1"
   set message: file("#{path}")
   set lazy_message: -> { file("#{path}") }

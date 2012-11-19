@@ -3,7 +3,7 @@
 # This example shows how to store and read a value from a file.
 #
 #   * examples/02_base.rb reads a file twice. Once where the file name
-#     is known, and once where it is unknown until set via an 
+#     is known, and once where it is unknown until set via an
 #     environment variable.
 
 examples="$(cd "$(dirname "$BASH_SOURCE")" && pwd)"
