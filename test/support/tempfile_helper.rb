@@ -25,7 +25,6 @@ module TempfileHelper
       before do
         @tmpdirs = {}
       end
-
       after do
         @tmpdirs.values.each { |dir| FileUtils.rm_rf dir.to_s }
       end
