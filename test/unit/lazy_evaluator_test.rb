@@ -26,6 +26,10 @@ describe Levels::LazyEvaluator do
     subject.call(-> { sample.message? }).must_equal true
   end
 
+  it "evaluates values within an array" do
+    subject.call([-> { 123 }]).must_equal [123]
+  end
+
   it "allows shell style interpolation" do
     skip "for now"
     level.set_group(:sample, message: "hello")

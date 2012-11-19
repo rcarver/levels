@@ -13,6 +13,8 @@ module Levels
         when Proc
           dsl = DSL.new(@level)
           value = dsl.instance_exec(&value)
+        when Array
+          return value.map { |v| call(v) }
         else
           return value
         end
