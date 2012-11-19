@@ -1,4 +1,5 @@
 class AcceptanceSpec < MiniTest::Spec
+  include TempfileHelper
 
   register_spec_type(self) do |desc|
     desc =~ /^acceptance:/

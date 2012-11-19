@@ -113,6 +113,31 @@ group :task_queue
   set queues: -> { [server.hostname, "high", "low"] }
 ```
 
+The Ruby syntax is extensible. Adding methods to `Levels::Runtime` will
+cause them to be available when parsing Ruby levels.
+
+**Builtin runtime extensions**
+
+  * `file(path)` reads the value from a file. The file path is
+    interpreted as relative to the Ruby file unless it begins with '/'.
+    File storage can be useful when configuring large strings such as
+    SSL keys.
+
+**Extending the Runtime**
+
+To extend the runtime environment, add methods to `Levels::Runtime`.
+Those methods can return a value directly, or return a Proc for
+lazy evaluation and use of other values.
+
+```ruby
+module Levels::Runtime
+  # This helper decrypts a value using the merged value of
+  # `secret_keys.sha_key`.
+  def encrypted(encrypted_value)
+    -> { SHA.decrypt(encrypted_value, secret_keys.sha_key) }
+  end
+end
+```
 #### JSON Syntax
 
 JSON syntax is straightforward. Because the datatypes supported by
@@ -141,7 +166,7 @@ server:
   hostname: example.com
 task_queue:
   workers: 5
-  queues: 
+  queues:
   - high
   - low
 ```

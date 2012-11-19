@@ -28,6 +28,7 @@ module Levels
       #       set queues: -> { ["high", "low", webserver.hostname] }
       #
       class DSL
+        include Levels::Runtime
 
         def initialize(level)
           @level = level
