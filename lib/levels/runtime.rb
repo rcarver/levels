@@ -15,6 +15,7 @@ module Levels
     # That proc raises Levels::Ruby::FileNotFoundError if the file does
     #   not exist.
     def file(file_path)
+      return nil if file_path.nil?
       caller_path = Pathname.new(caller[0]).dirname
       -> do
         path = caller_path + file_path
