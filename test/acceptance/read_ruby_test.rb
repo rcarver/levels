@@ -63,24 +63,21 @@ group "names"
       Levels.merge Levels.read_ruby("the ruby", <<-RUBY, ruby_file.to_s) 
 group "group1"
   set message: file("#{path}")
+  set lazy_message: -> { file("#{path}") }
       RUBY
-    end
-
-    def assert_message(level, message)
-      level.group1.message.must_equal message
     end
 
     it "reads a file in the same directory" do
       level = read_ruby_with_file_path_path("f1")
       w("f1", "hello world")
-      assert_message level, "hello world"
+      level.group1.message.must_equal "hello world"
     end
 
     it "reads a file at a relative path" do
       level = read_ruby_with_file_path_path("d/f1")
       (ruby_file.dirname + "d").mkdir
       w("d/f1", "hello world")
-      assert_message level, "hello world"
+      level.group1.message.must_equal "hello world"
     end
 
     it "reads a file at an absolute path" do
@@ -89,7 +86,7 @@ group "group1"
         level = read_ruby_with_file_path_path(f.path)
         f.write "hello world"
         f.close
-        assert_message level, "hello world"
+        level.group1.message.must_equal "hello world"
       ensure
         f.close!
       end
@@ -99,6 +96,12 @@ group "group1"
       level = read_ruby_with_file_path_path("f1")
       level.group1.defined?(:message).must_equal true
       -> { level.group1.message }.must_raise Levels::Runtime::FileNotFoundError
+    end
+
+    it "lazily reads a file" do
+      level = read_ruby_with_file_path_path("f1")
+      w("f1", "hello world")
+      level.group1.lazy_message.must_equal "hello world"
     end
   end
 end

@@ -4,6 +4,7 @@ require "yaml"
 require "levels/version"
 
 require "levels/method_missing"
+require "levels/runtime"
 
 require "levels/event_handler"
 require "levels/group"
@@ -13,7 +14,6 @@ require "levels/lazy_evaluator"
 require "levels/level"
 require "levels/merged"
 require "levels/merged_group"
-require "levels/runtime"
 
 require "levels/input/json"
 require "levels/input/ruby"

@@ -21,7 +21,7 @@ module Levels
 
     class DSL
       include Levels::MethodMissing
-      # TODO: include Levels::Runtime
+      include Levels::Runtime
 
       def initialize(level)
         @level = level
