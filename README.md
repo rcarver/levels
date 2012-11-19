@@ -113,17 +113,10 @@ group :task_queue
   set queues: -> { [server.hostname, "high", "low"] }
 ```
 
+##### Extending the Runtime
+
 The Ruby syntax is extensible. Adding methods to `Levels::Runtime` will
 cause them to be available when parsing Ruby levels.
-
-**Builtin runtime extensions**
-
-  * `file(path)` reads the value from a file. The file path is
-    interpreted as relative to the Ruby file unless it begins with '/'.
-    File storage can be useful when configuring large strings such as
-    SSL keys.
-
-**Extending the Runtime**
 
 To extend the runtime environment, add methods to `Levels::Runtime`.
 Those methods can return a value directly, or return a Proc for
@@ -138,6 +131,14 @@ module Levels::Runtime
   end
 end
 ```
+
+##### Builtin runtime extensions
+
+  * `file(path)` reads the value from a file. The file path is
+    interpreted as relative to the Ruby file unless it begins with '/'.
+    File storage can be useful when configuring large strings such as
+    SSL keys.
+
 #### JSON Syntax
 
 JSON syntax is straightforward. Because the datatypes supported by
