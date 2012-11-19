@@ -115,9 +115,6 @@ group :task_queue
 
 ##### Extending the Runtime
 
-The Ruby syntax is extensible. Adding methods to `Levels::Runtime` will
-cause them to be available when parsing Ruby levels.
-
 To extend the runtime environment, add methods to `Levels::Runtime`.
 Those methods can return a value directly, or return a Proc for
 lazy evaluation and use of other values.
