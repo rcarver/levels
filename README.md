@@ -241,9 +241,9 @@ In any case, any number of levels, including the system environment, may
 be merged. The system environment is typically merged last, but it's not
 required.
 
-**From the command line**, Levels can generate environment variables or
-JSON. The generated configuration is written to STDOUT. Both JSON and
-Environment Variables look exactly like the input formats above.
+**From the command line**, Levels can generate JSON, YAML or environment
+variables. The generated configuration is written to STDOUT. Both JSON
+and Environment Variables look exactly like the input formats above.
 
 ```sh
 levels \
