@@ -9,3 +9,9 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
+desc "Run all of the examples"
+task :examples do
+  Dir["examples/*.sh"].each do |script|
+    sh script
+  end
+end
