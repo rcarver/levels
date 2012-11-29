@@ -41,11 +41,23 @@ module Levels
       @indent = 0
     end
 
-    def on_read(group_name, key)
-      write :white, "> #{group_name}.#{key}"
+    def on_values(values)
+      write :white, "> #{values.group_key}.#{values.value_key}"
+      values.each do |value|
+        indent do
+          value.notify(self)
+        end
+        if value.final?
+          write :green, " + #{value.inspect} from #{value.level_name}"
+        else
+          write :red, " - #{value.inspect} from #{value.level_name}"
+        end
+      end
     end
 
-    def on_evaluate(group_name, key, level_name)
+  protected
+
+    def indent
       begin
         @indent += 1
         yield
@@ -53,19 +65,6 @@ module Levels
         @indent -= 1
       end
     end
-
-    def on_values(group_name, key, levels)
-      final_level_name, final_value = levels.last
-      skipped_levels = levels[0..-2]
-
-      skipped_levels.each do |level_name, value|
-        write :red, " - #{value.inspect} from #{level_name}"
-      end
-
-      write :green, " + #{final_value.inspect} from #{final_level_name}"
-    end
-
-  protected
 
     def write(color, str)
       prefix = "  " * @indent
