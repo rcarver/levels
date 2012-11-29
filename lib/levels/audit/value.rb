@@ -12,25 +12,26 @@ module Levels
       attr_reader :level_name
       attr_reader :value
 
-      attr_reader :nested_group_observers
+      alias raw value
 
       def final?
         !!@final
       end
 
+      def inspect
+        value.inspect
+      end
+
+      def add_nested_group_observer(nested_group_observer)
+        @nested_group_observers << nested_group_observer
+      end
+
       def notify(observer)
-        nested_group_observers.each do |ngo|
+        @nested_group_observers.each do |ngo|
           ngo.notify_nested(observer)
         end
       end
 
-      def raw
-        value
-      end
-
-      def inspect
-        value.inspect
-      end
     end
   end
 end

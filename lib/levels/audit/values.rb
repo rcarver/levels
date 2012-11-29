@@ -11,10 +11,6 @@ module Levels
       attr_reader :group_key
       attr_reader :value_key
 
-      def valid?
-        @values.any?
-      end
-
       def final_value
         @values.find { |v| v.final? }.value
       end

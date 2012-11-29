@@ -10,7 +10,7 @@ module Levels
       def observe_group(user_observer)
         if @current_value
           observer = NestedGroupObserver.new(value_observer)
-          @current_value.nested_group_observers << observer
+          @current_value.add_nested_group_observer(observer)
           observer
         else
           GroupObserver.new(value_observer, user_observer)
