@@ -3,14 +3,7 @@ module Levels
   # read from a merged group.
   module EventHandler
 
-    def on_read(group_name, key)
-    end
-
-    def on_evaluate(group_name, key, level_name)
-      yield
-    end
-
-    def on_values(group_name, key, levels)
+    def on_values(values)
     end
   end
 
