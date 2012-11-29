@@ -14,7 +14,7 @@ module Levels
       end
 
       def notify_nested(user_observer)
-        @values.each { |v| user_observer.on_values(v) }
+        @values.each { |v| user_observer.on_nested_values(v) }
         @values.clear
       end
     end

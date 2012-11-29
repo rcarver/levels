@@ -19,7 +19,7 @@ describe Levels::Audit::NestedGroupObserver do
     value_observer.verify
 
     user_observer = MiniTest::Mock.new
-    user_observer.expect(:on_values, nil, [observed_values])
+    user_observer.expect(:on_nested_values, nil, [observed_values])
 
     subject.notify_nested(user_observer)
     user_observer.verify

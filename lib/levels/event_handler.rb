@@ -5,6 +5,9 @@ module Levels
 
     def on_values(values)
     end
+
+    def on_nested_values(values)
+    end
   end
 
   # A null implementation.
@@ -44,14 +47,18 @@ module Levels
     def on_values(values)
       write :white, "> #{values.group_key}.#{values.value_key}"
       values.each do |value|
-        indent do
-          value.notify(self)
-        end
+        value.notify(self)
         if value.final?
           write :green, " + #{value.inspect} from #{value.level_name}"
         else
           write :red, " - #{value.inspect} from #{value.level_name}"
         end
+      end
+    end
+
+    def on_nested_values(values)
+      indent do
+        on_values(values)
       end
     end
 
