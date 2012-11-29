@@ -6,6 +6,7 @@ require "levels/version"
 require "levels/method_missing"
 require "levels/runtime"
 
+require "levels/audit"
 require "levels/event_handler"
 require "levels/group"
 require "levels/key"
