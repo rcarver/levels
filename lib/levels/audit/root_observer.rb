@@ -4,13 +4,13 @@ module Levels
 
       def initialize(lazy_evaluator)
         @lazy_evaluator = lazy_evaluator
-        @current_value = nil
+        @current_value_stack = []
       end
 
       def observe_group(user_observer)
-        if @current_value
+        if current_value
           observer = NestedGroupObserver.new(value_observer)
-          @current_value.add_nested_group_observer(observer)
+          current_value.add_nested_group_observer(observer)
           observer
         else
           GroupObserver.new(value_observer, user_observer)
@@ -19,11 +19,15 @@ module Levels
 
       def with_current_value(value)
         begin
-          @current_value = value
+          @current_value_stack << value
           yield
         ensure
-          @current_value = nil
+          @current_value_stack.pop
         end
+      end
+
+      def current_value
+        @current_value_stack.last
       end
 
     protected

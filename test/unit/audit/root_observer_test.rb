@@ -17,13 +17,23 @@ describe Levels::Audit::RootObserver do
 
   describe "#with_current_value" do
 
-    it "sets the current value for the life of the block" do
-      value = "the value"
-      subject.instance_variable_get(:@current_value).must_be_nil
-      subject.with_current_value(value) do
-        subject.instance_variable_get(:@current_value).must_equal value
+    it "sets the current value for the life of the block, and restores each previous value" do
+      value1 = "the value 1"
+      value2 = "the value 2"
+
+      subject.current_value.must_be_nil
+
+      subject.with_current_value(value1) do
+        subject.current_value.must_equal value1
+
+        subject.with_current_value(value2) do
+          subject.current_value.must_equal value2
+        end
+
+        subject.current_value.must_equal value1
       end
-      subject.instance_variable_get(:@current_value).must_be_nil
+
+      subject.current_value.must_be_nil
     end
   end
 
