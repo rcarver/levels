@@ -28,4 +28,13 @@ describe Levels::Audit::Values do
 
     subject.final_value.must_equal "hello"
   end
+
+  it "defines #empty?" do
+    values.must_be :empty?
+
+    v = MiniTest::Mock.new
+    values.concat [v]
+
+    values.wont_be :empty?
+  end
 end

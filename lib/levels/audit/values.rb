@@ -21,6 +21,10 @@ module Levels
         @values.each(&block)
       end
 
+      def empty?
+        @values.empty?
+      end
+
       def inspect
         "<Values #{group_key.inspect} #{value_key.inspect} #{@values.inspect}>"
       end
