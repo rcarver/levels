@@ -1,6 +1,22 @@
 module Levels
-  # This is the interface for capturing what happens when a key is
-  # read from a merged group.
+  # This is the interface for capturing what happens when a value is read.
+  # Capturing events exposes you to the audit trail system implemented in
+  # Levels::Audit.
+  #
+  #     class MyEventHandler
+  #
+  #       def on_values(values)
+  #         # This method is called any time a value is accessed.
+  #         # The argument `values` is a Levels::Audit::Values representing the
+  #         # set of all possible values.
+  #       end
+  #
+  #       def on_nested_values(values)
+  #         # Similar to `on_values`, but called when the values were found
+  #         # during the evaluation of another value.
+  #       end
+  #     end
+  #
   module EventHandler
 
     def on_values(values)
