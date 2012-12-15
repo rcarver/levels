@@ -9,22 +9,19 @@ module Levels
     #
     def initialize(levels, event_handler = nil)
       @levels = levels
-      @lazy_evaluator = LazyEvaluator.new(self)
-      self.event_handler = event_handler || NullEventHandler.new
+      @event_handler = event_handler || NullEventHandler.new
+      @root_observer = Levels::Audit.start(LazyEvaluator.new(self))
     end
 
-    # See Levels::Level#[].
-    def [](group_name)
-      levels = @levels.find_all { |level| level.defined?(group_name) }
-      raise UnknownGroup if levels.empty?
-
-      groups = levels.map { |level| level[group_name] }
-      Levels::MergedGroup.new(group_name, groups, @event_handler, @lazy_evaluator)
+    def [](group_key)
+      raise UnknownGroup unless self.defined?(group_key)
+      group_observer = @root_observer.observe_group(@event_handler)
+      Levels::MergedGroup.new(@levels, group_key, group_observer)
     end
 
     # See Levels::Level#defined?.
-    def defined?(group_name)
-      @levels.any? { |level| level.defined?(group_name) }
+    def defined?(group_key)
+      @levels.any? { |level| level.defined?(group_key) }
     end
 
     def to_s
@@ -39,13 +36,13 @@ module Levels
     # Returns an Enumerator which yields [gruop_name, Group#to_enum].
     def to_enum
       Enumerator.new do |y|
-        group_names = Set.new
+        group_keys = Set.new
         @levels.each do |level|
           level.to_enum.each do |name, group|
-            group_names << name
+            group_keys << name
           end
         end
-        group_names.each do |name|
+        group_keys.each do |name|
           y << [name, self[name].to_enum]
         end
       end
