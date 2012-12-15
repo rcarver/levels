@@ -1,16 +1,28 @@
 module Levels
-  # This is the interface for capturing what happens when a key is
-  # read from a merged group.
+  # This is the interface for capturing what happens when a value is read.
+  # Capturing events exposes you to the audit trail system implemented in
+  # Levels::Audit.
+  #
+  #     class MyEventHandler
+  #
+  #       def on_values(values)
+  #         # This method is called any time a value is accessed.
+  #         # The argument `values` is a Levels::Audit::Values representing the
+  #         # set of all possible values.
+  #       end
+  #
+  #       def on_nested_values(values)
+  #         # Similar to `on_values`, but called when the values were found
+  #         # during the evaluation of another value.
+  #       end
+  #     end
+  #
   module EventHandler
 
-    def on_read(group_name, key)
+    def on_values(values)
     end
 
-    def on_evaluate(group_name, key, level_name)
-      yield
-    end
-
-    def on_values(group_name, key, levels)
+    def on_nested_values(values)
     end
   end
 
@@ -48,11 +60,27 @@ module Levels
       @indent = 0
     end
 
-    def on_read(group_name, key)
-      write :white, "> #{group_name}.#{key}"
+    def on_values(values)
+      write :white, "> #{values.group_key}.#{values.value_key}"
+      values.each do |value|
+        value.notify(self)
+        if value.final?
+          write :green, " + #{value.inspect} from #{value.level_name}"
+        else
+          write :red, " - #{value.inspect} from #{value.level_name}"
+        end
+      end
     end
 
-    def on_evaluate(group_name, key, level_name)
+    def on_nested_values(values)
+      indent do
+        on_values(values)
+      end
+    end
+
+  protected
+
+    def indent
       begin
         @indent += 1
         yield
@@ -60,19 +88,6 @@ module Levels
         @indent -= 1
       end
     end
-
-    def on_values(group_name, key, levels)
-      final_level_name, final_value = levels.last
-      skipped_levels = levels[0..-2]
-
-      skipped_levels.each do |level_name, value|
-        write :red, " - #{value.inspect} from #{level_name}"
-      end
-
-      write :green, " + #{final_value.inspect} from #{final_level_name}"
-    end
-
-  protected
 
     def write(color, str)
       prefix = "  " * @indent
