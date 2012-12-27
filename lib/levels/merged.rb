@@ -13,24 +13,38 @@ module Levels
       @root_observer = Levels::Audit.start(LazyEvaluator.new(self))
     end
 
+    # Public: Set the event handler.
+    #
+    # event_handler - Levels::EventHandler.
+    #
+    # Returns nothing.
+    def event_handler=(event_handler)
+      @event_handler = event_handler
+    end
+
+    # Public: Retrieve a group.
+    #
+    # group_key - Symbol name of the group.
+    #
+    # Returns a Levels::MergedGroup.
+    # Raises Levels::UnknownGroup if the group is not defined.
     def [](group_key)
       raise UnknownGroup unless self.defined?(group_key)
       group_observer = @root_observer.observe_group(@event_handler)
       Levels::MergedGroup.new(@levels, group_key, group_observer)
     end
 
-    # See Levels::Level#defined?.
+    # Public: Determine if a group is defined.
+    #
+    # group_key - Symbol name of the group.
+    #
+    # Returns a Boolean.
     def defined?(group_key)
       @levels.any? { |level| level.defined?(group_key) }
     end
 
     def to_s
       "<Levels::Merged #{@levels.map { |l| l._level_name }.join(', ')}>"
-    end
-
-    # Set the event handler.
-    def event_handler=(event_handler)
-      @event_handler = event_handler
     end
 
     # Returns an Enumerator which yields [gruop_name, Group#to_enum].

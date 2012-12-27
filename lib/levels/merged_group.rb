@@ -12,14 +12,23 @@ module Levels
       @group_observer = group_observer
     end
 
-    # See Levels::Group#[].
+    # Public: Retrieve a value.
+    #
+    # value_key - Symbol name of the value.
+    #
+    # Returns the value stored at that key.
+    # Raises Levels::UnknownKey if the value is not defined.
     def [](value_key)
       raise UnknownKey unless self.defined?(value_key)
       values = @group_observer.observe_values(@levels, @group_key, value_key)
       values.final_value
     end
 
-    # See Levels::Group#defined?
+    # Public: Determine if a value is defined.
+    #
+    # value_key - Symbol name of the value.
+    #
+    # Returns a Boolean.
     def defined?(value_key)
       groups.any? { |group| group.defined?(value_key) }
     end
