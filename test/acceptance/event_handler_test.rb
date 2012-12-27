@@ -18,7 +18,7 @@ group :names
 
     stream = StringIO.new
 
-    merged = Levels.merge(level1, level2)
+    merged = Levels::Merged.new([level1, level2])
     merged.event_handler = Levels::CliEventHandler.new(stream)
 
     merged.names.full_name

@@ -107,7 +107,7 @@ end
 # Read the system using the existing levels as a base, then add it
 # as another level.
 if @system
-  merged = Levels.merge(*@levels)
+  merged = Levels::Merged.new(*@levels)
   level_name = "System Environment"
   if @system_input_prefix
     STDERR.puts "Add level #{level_name.inspect} with prefix #{@system_input_prefix}"
@@ -119,7 +119,7 @@ end
 
 # Write the merged configuration to stdout.
 if @output && @levels.any?
-  merged = Levels.merge(*@levels)
+  merged = Levels::Merged.new(*@levels)
   merged.event_handler = Levels::CliEventHandler.new(STDERR, @colorize)
 
   case @output_format

@@ -48,7 +48,7 @@ group "names"
     let(:level1) { Levels.read_ruby("the ruby", level1_ruby, "file.rb") }
     let(:level2) { Levels.read_ruby("the ruby", level2_ruby, "file.rb") }
 
-    subject { Levels.merge(level1, level2) }
+    subject { Levels::Merged.new([level1, level2]) }
 
     it "resolves the computed value" do
       subject.names.full_name.must_equal "John Smith"
@@ -60,7 +60,7 @@ group "names"
     let(:ruby_file) { f("file.rb") }
 
     def read_ruby_with_file_path_path(path)
-      Levels.merge Levels.read_ruby("the ruby", <<-RUBY, ruby_file.to_s)
+      Levels::Merged.new [Levels.read_ruby("the ruby", <<-RUBY, ruby_file.to_s)]
 group "group1"
   set message: file("#{path}")
   set lazy_message: -> { file("#{path}") }
