@@ -258,13 +258,12 @@ levels \
 **Within a Ruby program**, Levels is an object.
 
 ```ruby
-# Specify the inputs levels.
-levels = Levels.setup
-levels.add "Base", "base.rb"
-levels.add "Prod", "prod.json"
-levels.add_system
-# Get a merged configuration.
-config = levels.merge
+# Merge multiple input levels.
+config = Levels.merge do |levels|
+  levels.add "Base", "base.rb"
+  levels.add "Prod", "prod.json"
+  levels.add_system
+end
 ```
 
 The resulting `config` object above works like this.
