@@ -18,6 +18,7 @@ module TempfileHelper
   # Write a file within the tmpdir.
   def w(name, content)
     f(name).open("w") { |f| f.print content }
+    f(name)
   end
 
   def self.included(base)

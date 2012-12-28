@@ -15,6 +15,7 @@ require "levels/lazy_evaluator"
 require "levels/level"
 require "levels/merged"
 require "levels/merged_group"
+require "levels/setup"
 
 require "levels/input/json"
 require "levels/input/ruby"
