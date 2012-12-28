@@ -1,5 +1,6 @@
 require "json"
 require "yaml"
+require "open3"
 
 require "levels/version"
 
