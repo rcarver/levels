@@ -59,10 +59,6 @@ module Levels
       end
     end
 
-    def _level_name
-      @level_name
-    end
-
     def eql_hash?(hash)
       @key_values == Levels::KeyValues.new(hash)
     end

@@ -84,42 +84,32 @@ end.parse!
 # Files are any remaining arguments after parsing.
 @files = ARGV.dup
 
-# Files are converted to levels.
-@levels = []
+@setup = Levels.setup
 
 # Read each file into a level.
 @files.each.with_index do |file, index|
   pn = Pathname.new(file)
-
   level_name = @level_names[index] || pn.basename.to_s
   STDERR.puts "Add level #{level_name.inspect} from #{pn.basename}"
 
-  case pn.extname
-  when ".rb" then
-    @levels << Levels.read_ruby(level_name, pn.read, pn.to_s)
-  when ".json" then
-    @levels << Levels.read_json(level_name, pn.read)
-  when ".yaml", ".yml" then
-    @levels << Levels.read_yaml(level_name, pn.read)
-  end
+  @setup.add level_name, file
 end
 
 # Read the system using the existing levels as a base, then add it
 # as another level.
 if @system
-  merged = Levels.merge(*@levels)
   level_name = "System Environment"
   if @system_input_prefix
     STDERR.puts "Add level #{level_name.inspect} with prefix #{@system_input_prefix}"
   else
     STDERR.puts "Add level #{level_name.inspect}"
   end
-  @levels << Levels.read_system(level_name, merged.to_enum, @system_input_prefix, ENV)
+  @setup.add_system @system_input_prefix, level_name, ENV
 end
 
 # Write the merged configuration to stdout.
-if @output && @levels.any?
-  merged = Levels.merge(*@levels)
+if @output && (@files.any? || @system)
+  merged = @setup.merge
   merged.event_handler = Levels::CliEventHandler.new(STDERR, @colorize)
 
   case @output_format

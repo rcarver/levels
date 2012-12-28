@@ -36,7 +36,7 @@ describe "acceptance: the audit observers" do
   let(:levels) { [] }
 
   # The merged view of the levels.
-  let(:merged) { Levels.merge(*levels) }
+  let(:merged) { Levels::Merged.new(levels) }
 
   # Computed values are evaluated against the merged levels.
   let(:lazy_evaluator) { Levels::LazyEvaluator.new(merged) }

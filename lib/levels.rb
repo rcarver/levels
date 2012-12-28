@@ -1,5 +1,6 @@
 require "json"
 require "yaml"
+require "open3"
 
 require "levels/version"
 
@@ -15,6 +16,7 @@ require "levels/lazy_evaluator"
 require "levels/level"
 require "levels/merged"
 require "levels/merged_group"
+require "levels/setup"
 
 require "levels/input/json"
 require "levels/input/ruby"
@@ -41,9 +43,35 @@ module Levels
   # Error thrown when attempting to read a key that has not been defined.
   UnknownKey = Class.new(StandardError)
 
-  # Internal: Create a merge from one or more env levels.
-  def self.merge(*levels)
-    Merged.new(levels)
+  # Public: Begin a new setup. The setup is used to add one or more
+  # levels, then get a merged configuration.
+  #
+  # Examples
+  #
+  #   setup = Levels.setup
+  #   setup.add "Base", "file.rb"
+  #   setup.add_system
+  #   my_config = setup.merge
+  #
+  # Returns a Levels::Setup.
+  def self.setup
+    Levels::Setup.new
+  end
+
+  # Public: Get a merged configuration by using the setup.
+  #
+  # Examples
+  #
+  #   my_config = Levels.merge do |setup|
+  #     setup.add "Base", "file.rb"
+  #     setup.add_system
+  #   end
+  #
+  # Returns a Levels::Merged.
+  def self.merge
+    setup = self.setup
+    yield setup if block_given?
+    setup.merge
   end
 
   def self.read_ruby(level_name, ruby_string, file, line = 1)
