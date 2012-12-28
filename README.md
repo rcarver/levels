@@ -258,9 +258,10 @@ levels \
 **Within a Ruby program**, Levels is an object.
 
 ```ruby
-# Merge multiple input levels.
+# Merge multiple input levels from various sources - file, API and
+# environment variables.
 config = Levels.merge do |levels|
-  levels.add "Base", "base.rb"
+  levels.add "Base", HTTP.get("http://server/config.json")
   levels.add "Prod", "prod.json"
   levels.add_system
 end
