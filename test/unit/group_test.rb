@@ -13,10 +13,6 @@ describe Levels::Group do
     hash[:other] = nil
   end
 
-  specify "#_level_name" do
-    subject._level_name.must_equal "fake level"
-  end
-
   specify "#to_s" do
     subject.to_s.must_equal "<Levels::Group test (\"fake level\")>"
   end
