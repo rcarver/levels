@@ -22,7 +22,7 @@ group "group2"
       RUBY
     }
 
-    subject { Levels.read_ruby("the ruby", ruby, "file.rb") }
+    subject { Levels.read_ruby("the ruby", ruby) }
 
     assert_sample_data_set
   end
@@ -45,8 +45,8 @@ group "names"
       RUBY
     }
 
-    let(:level1) { Levels.read_ruby("the ruby", level1_ruby, "file.rb") }
-    let(:level2) { Levels.read_ruby("the ruby", level2_ruby, "file.rb") }
+    let(:level1) { Levels.read_ruby("the ruby", level1_ruby) }
+    let(:level2) { Levels.read_ruby("the ruby", level2_ruby) }
 
     subject { Levels::Merged.new([level1, level2]) }
 

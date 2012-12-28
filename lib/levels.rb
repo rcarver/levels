@@ -74,7 +74,7 @@ module Levels
     setup.merge
   end
 
-  def self.read_ruby(level_name, ruby_string, file, line = 1)
+  def self.read_ruby(level_name, ruby_string, file = 'Ruby String', line = 1)
     level = Levels::Level.new(level_name)
     input = Levels::Input::Ruby.new(ruby_string, file, line)
     input.read(level)

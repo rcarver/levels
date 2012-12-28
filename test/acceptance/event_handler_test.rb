@@ -11,7 +11,7 @@ group :names
   set last_name: "Doe"
     RUBY
 
-    level2 = Levels.read_ruby("Two", <<-RUBY, "file.rb")
+    level2 = Levels.read_ruby("Two", <<-RUBY)
 group :names
   set last_name: "Smith"
     RUBY
