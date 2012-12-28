@@ -31,6 +31,17 @@ group:
       YAML
     end
 
+    it "adds a custom source" do
+      custom_input = Class.new do
+        def read(level)
+          level.set_group(:group, a: 1)
+        end
+      end
+      custom = custom_input.new
+      subject.add("custom", custom)
+      subject.merge.group.a.must_equal 1
+    end
+
     it "adds ruby code" do
       subject.add("code", ruby_code)
       subject.merge.group.a.must_equal 1

@@ -9,7 +9,9 @@ module Levels
     # Public: Add a level of configuration.
     #
     # name   - String name of the level.
-    # source - String file path or code to parse.
+    # source - Anything that can be identified as an input source. File
+    #          path, code or any object that responds to #read is a valid 
+    #          source.
     #
     # Returns nothing.
     def add(name, source)
@@ -71,9 +73,10 @@ module Levels
       def input
         format, source, *args = identify
         case format
-        when :ruby then Levels::Input::Ruby.new(source, *args)
-        when :json then Levels::Input::JSON.new(source)
-        when :yaml then Levels::Input::YAML.new(source)
+        when :custom then source
+        when :ruby   then Levels::Input::Ruby.new(source, *args)
+        when :json   then Levels::Input::JSON.new(source)
+        when :yaml   then Levels::Input::YAML.new(source)
         else raise ArgumentError, "Could not identify the format"
         end
       end
@@ -81,6 +84,9 @@ module Levels
       # Determine the format of the source and read it from disk if
       # it's a file.
       def identify
+        if @source.respond_to?(:read)
+          return :custom, @source
+        end
         pn = Pathname.new(@source)
         if pn.exist?
           case pn.extname
