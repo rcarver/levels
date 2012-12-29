@@ -21,6 +21,11 @@ module Levels
       # Public: Returns a Levels::Key.
       attr_reader :value_key
 
+      # Public: Returns the Levels::Audit::Value marked final.
+      def final
+        @values.find { |v| v.final? }
+      end
+
       # Public: Returns the actual user-defined final value.
       def final_value
         @values.find { |v| v.final? }.value
@@ -28,10 +33,17 @@ module Levels
 
       include Enumerable
 
+      # Public: Iterate over all potential values.
       def each(&block)
         @values.each(&block)
       end
 
+      # Public: Returns the number of potential values.
+      def size
+        @values.size
+      end
+
+      # Public: Returns true if there are no potential values.
       def empty?
         @values.empty?
       end
