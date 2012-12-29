@@ -38,14 +38,24 @@ module Levels
         @values.each(&block)
       end
 
-      # Public: Returns the number of potential values.
-      def size
-        @values.size
-      end
-
       # Public: Returns true if there are no potential values.
       def empty?
         @values.empty?
+      end
+
+      # Public: Returns true if there is only a final value.
+      def only_final?
+        size == 1 && final
+      end
+
+      # Public: Returns true if any of the values are recursive.
+      def recursive?
+        @values.any? { |v| v.recursive? }
+      end
+
+      # Public: Returns the number of potential values.
+      def size
+        @values.size
       end
 
       def inspect

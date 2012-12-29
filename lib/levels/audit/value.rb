@@ -10,11 +10,15 @@ module Levels
       # final      - Boolean true if this is the "final" value for a set of
       #              levels.
       #
-      def initialize(level_name, final)
+      def initialize(level_name, final, value = :__no_value__)
         @level_name = level_name
         @final = final
         @nested_group_observers = []
-        @value = yield self
+        if value == :__no_value__
+          @value = yield self if block_given?
+        else
+          @value = value
+        end
       end
 
       # Returns a String the name of the level.
@@ -29,6 +33,11 @@ module Levels
       # Returns a Boolean true if this is the final value.
       def final?
         !!@final
+      end
+
+      # Returns a Boolean true if this value is recursive.
+      def recursive?
+        !@nested_group_observers.empty?
       end
 
       # Public: Trigger a notification of the nested values. For any nested

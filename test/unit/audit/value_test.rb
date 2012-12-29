@@ -30,4 +30,12 @@ describe Levels::Audit::Value do
     a.must_be :final?
     b.wont_be :final?
   end
+
+  it "exposes recursiveness" do
+    subject.wont_be :recursive?
+
+    subject.add_nested_group_observer(MiniTest::Mock.new)
+
+    subject.must_be :recursive?
+  end
 end

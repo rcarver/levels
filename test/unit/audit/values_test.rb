@@ -16,52 +16,71 @@ describe Levels::Audit::Values do
     subject.value_key.must_equal value_key
   end
 
-  it "exposes the final value" do
-    v1 = MiniTest::Mock.new
-    v1.expect(:final?, false)
-
-    v2 = MiniTest::Mock.new
-    v2.expect(:final?, true)
-
-    # It's impossible to do any kind of comparison
-    # on this mock object, so we'll make sure it's
-    # the right one by talking to it.
-    v2.expect(:ping!, nil)
+  specify "#final" do
+    v1 = Levels::Audit::Value.new("a", false)
+    v2 = Levels::Audit::Value.new("a", true)
 
     values.concat [v1, v2]
 
-    subject.final.ping!
-    v2.verify
+    subject.final.must_equal v2
   end
 
-  it "exposes the final value's value" do
-    v1 = MiniTest::Mock.new
-    v1.expect(:final?, false)
-
-    v2 = MiniTest::Mock.new
-    v2.expect(:final?, true)
-    v2.expect(:value, "hello")
+  specify "#final_value" do
+    v1 = Levels::Audit::Value.new("a", false, "no")
+    v2 = Levels::Audit::Value.new("a", true, "hello")
 
     values.concat [v1, v2]
 
     subject.final_value.must_equal "hello"
   end
 
-  it "defines #empty?" do
-    values.must_be :empty?
-
-    v = MiniTest::Mock.new
-    values.concat [v]
-
-    values.wont_be :empty?
+  specify "#each is Enumerable" do
+    subject.map.must_be_instance_of Enumerator
   end
 
-  it "defines #size" do
+  specify "#only_final?" do
+    v1 = MiniTest::Mock.new
+    v1.expect(:final?, false)
+    v2 = MiniTest::Mock.new
+    v2.expect(:final?, true)
+
+    subject.wont_be :only_final?
+
+    values << v2
+    subject.must_be :only_final?
+
+    values << v1
+    subject.wont_be :only_final?
+  end
+
+  specify "#recursive?" do
+    v1 = MiniTest::Mock.new
+    2.times { v1.expect(:recursive?, false) }
+    v2 = MiniTest::Mock.new
+    v2.expect(:recursive?, true)
+
+    subject.wont_be :recursive?
+
+    values << v1
+    subject.wont_be :recursive?
+
+    values << v2
+    subject.must_be :recursive?
+  end
+
+  specify "#size" do
     values.size.must_equal 0
 
-    v = MiniTest::Mock.new
-    values.concat [v]
+    values << MiniTest::Mock.new
 
     values.size.must_equal 1
+  end
+
+  specify "#empty?" do
+    values.must_be :empty?
+
+    values << MiniTest::Mock.new
+
+    values.wont_be :empty?
   end
 end
