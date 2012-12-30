@@ -2,6 +2,17 @@ module Levels
   # A Level is a named set of groups. A Configuration is made up of multiple
   # levels with clear semantics on how those levels are merged. You generally won't
   # instantiate a Level directly, but instead load one from an external source.
+  #
+  # Examples
+  #
+  #     level = Levels::Level.new("My Level")
+  #
+  #     level.set_group(:group1, a: 1, b: 2)
+  #     level.set_group(:group2, c: 3, d: 4)
+  #
+  #     level.group1 # => { a: 1, b: 2 }
+  #     level.group2 # => { c: 3, d: 4 }
+  #
   class Level
     include Levels::MethodMissing
 
