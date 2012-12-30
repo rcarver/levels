@@ -3,8 +3,8 @@
 [![Build Status](https://secure.travis-ci.org/rcarver/levels.png)](http://travis-ci.org/rcarver/levels)
 
 Levels is a tool for reading and writing configuration data. A level is
-a set of key/value pairs containing configuration data. Multiple levels
-may be merged in a predictable, useful way.
+a set of key/value pairs that represent your data. Multiple levels are
+merged in a predictable, useful way to form your configuration.
 
   > **KRAMER:** *I'm completely changing the configuration of the apartment. You're not gonna believe it when you see it. A whole new lifestyle.*
 
@@ -14,9 +14,9 @@ may be merged in a predictable, useful way.
 
 ## Creating a level
 
-Each level of configuration is made up of one or more groups. Each group
-is a set of key/value pairs. To describe a very simple web application
-made up of a server and a task queue, you could write this (in JSON).
+Each level is made up of one or more groups. Each group is a set of
+key/value pairs. To describe a very simple web application made up of a
+server and a task queue, you could write this (in JSON).
 
 ```json
 {
@@ -30,9 +30,9 @@ made up of a server and a task queue, you could write this (in JSON).
 }
 ```
 
-Now consider having a common "base" configuration, with
-slight differences in development and production. Our base
-configuration defines the possible keys, with default values.
+Now consider having a common "base" configuration, with slight
+differences in development and production. Our base configuration
+defines the possible keys, with default values.
 
 A "production" level could override the relevant values like this.
 
@@ -47,7 +47,7 @@ A "production" level could override the relevant values like this.
 }
 ```
 
-The system's environment is another level. To alter any value at
+The system's environment may be used as a level. To alter any value at
 runtime, follow a convention to set the appropriate environment
 variable.
 
@@ -68,7 +68,7 @@ Levels may be written in several formats.
 #### Data Types
 
 Levels has a limited understanding of data types by design. The guiding
-principles for this are:
+principles are:
 
   * It must be possible to represent any value in an environment
     variable.
@@ -93,9 +93,7 @@ of system configuration.
 #### Ruby Syntax
 
 The Ruby DSL is a clean, simple format. It aims to be readable, writable and
-editable. It is also extensible.
-
-The format looks like this:
+editable. It looks like this:
 
 ```ruby
 group :server
@@ -113,11 +111,11 @@ group :task_queue
   set queues: -> { [server.hostname, "high", "low"] }
 ```
 
-##### Extending the Runtime
+##### Extending the Ruby Runtime
 
 To extend the runtime environment, add methods to `Levels::Runtime`.
 Those methods can return a value directly, or return a Proc for
-lazy evaluation and use of other values.
+lazy evaluation.
 
 ```ruby
 module Levels::Runtime
@@ -130,6 +128,8 @@ end
 ```
 
 ##### Builtin runtime extensions
+
+These functions are provided by the default Levels Runtime.
 
   * `file(path)` reads the value from a file. The file path is
     interpreted as relative to the Ruby file unless it begins with '/'.
@@ -193,7 +193,7 @@ TASK_QUEUE_QUEUES="high:low"
 You'll notice that `TASK_QUEUE_WORKERS` should be an integer, and
 `TASK_QUEUE_QUEUES` should be an array. Levels will typecast each value
 based on the key's type in the "base" level. Or, you may define each
-value's type.
+value's type explicitly.
 
 To set the type of a value, set `<GROUP>_<KEY>_TYPE` to one of the
 following values:
@@ -202,10 +202,11 @@ following values:
   * `integer` - The value is converted to an integer via Ruby's `to_i`.
   * `float` - The value is converted to a float via Ruby's `to_f`.
   * `boolean` - The value is `true` if it's "true" or "1", else `false`.
-  * `array` - The value is split using `_DELIMITER` or colon (`:`). The
-    values of the resulting array may be typecast using `_TYPE_TYPE`.
+  * `array` - The value is split using colon (`:`) or
+    `<GROUP>_<KEY>_DELIMITER`. The values of the resulting array may be
+    typecast using `<GROUP>_<KEY>_TYPE_TYPE`.
 
-Any value may be set to Ruby's `nil` (`Null`) by setting it to an empty
+Any value may be set to Ruby's `nil` (`NULL`) by setting it to an empty
 string.
 
 Some examples:
@@ -231,11 +232,11 @@ SAMPLE_MY_CSV_ARRAY_TYPE="array"
 SAMPLE_MY_CSV_ARRAY_DELIMITER=","
 ```
 
-## Using a configuration
+## Using a Configuration
 
-Once a configuration has been written, Levels can read and merge it.
-Once merged, you can use it at runtime in a Ruby process, or output it
-as JSON or Environment Variables.
+Once a level has been written, Levels can read and merge it. Once merged
+into a Configuration, you can use it at runtime in a Ruby process, or
+output it as JSON, YAML or environment variables.
 
 In any case, any number of levels, including the system environment, may
 be merged. The system environment is typically merged last, but it's not
@@ -255,7 +256,8 @@ levels \
   prod.json
 ```
 
-**Within a Ruby program**, Levels is an object.
+**Within a Ruby program**, a `Levels::Configuration` is an object. You
+can build one with `Levels.merge`.
 
 ```ruby
 # Merge multiple input levels from various sources - file, API and
@@ -267,7 +269,7 @@ config = Levels.merge do |levels|
 end
 ```
 
-The resulting `config` object above works like this.
+The resulting `config` object works like this.
 
 ```ruby
 # Dot syntax.
