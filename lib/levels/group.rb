@@ -3,8 +3,7 @@ module Levels
   #
   # Examples
   #
-  #     hash = { name: "Joe", age: 33 }
-  #     group = Levels::Group.new("Global", :person, hash)
+  #     group = Levels::Group.new(name: "Joe", age: 33)
   #
   #     group.name # => "Joe"
   #     group.age  # => 33
@@ -14,14 +13,10 @@ module Levels
 
     # Internal: Initialize a new group.
     #
-    # level_name        - String name of the level.
-    # group_key         - Symbol name of the group.
     # data              - Hash of key/values for the group.
     # value_transformer - Proc that takes (key, value) and returns value.
     #
-    def initialize(level_name, group_key, data = {}, value_transformer = nil)
-      @level_name = level_name.to_s
-      @group_key = Levels::Key.new(group_key)
+    def initialize(data = {}, value_transformer = nil)
       @key_values = Levels::KeyValues.new(data)
       @value_transformer = value_transformer || -> key, value { value }
     end
@@ -47,7 +42,7 @@ module Levels
     end
 
     def to_s
-      "<Levels::Group #{@group_key.to_sym} (#{@level_name.inspect})>"
+      "<Levels::Group>"
     end
 
     # Returns an Enumerator which yields [key, value].
@@ -62,6 +57,5 @@ module Levels
     def eql_hash?(hash)
       @key_values == Levels::KeyValues.new(hash)
     end
-
   end
 end

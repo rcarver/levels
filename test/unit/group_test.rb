@@ -5,7 +5,7 @@ describe Levels::Group do
   let(:hash) { {} }
   let(:value_transformer) { nil }
 
-  subject { Levels::Group.new("fake level", :test, hash, value_transformer) }
+  subject { Levels::Group.new(hash, value_transformer) }
 
   before do
     hash[:name] = "ok"
@@ -14,7 +14,7 @@ describe Levels::Group do
   end
 
   specify "#to_s" do
-    subject.to_s.must_equal "<Levels::Group test (\"fake level\")>"
+    subject.to_s.must_equal "<Levels::Group>"
   end
 
   it "allows hash access" do

@@ -41,7 +41,7 @@ module Levels
       if @groups.key?(group_name)
         raise DuplicateGroup, "#{group_name} has already been defined"
       end
-      @groups[group_name] = Group.new(@name, group_name, hash)
+      @groups[group_name] = Group.new(hash)
     end
 
     def to_s
