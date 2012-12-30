@@ -10,7 +10,7 @@ module Levels
     #
     # name   - String name of the level.
     # source - Anything that can be identified as an input source. File
-    #          path, code or any object that responds to #read is a valid 
+    #          path, code or any object that responds to #read is a valid
     #          source.
     #
     # Returns nothing.
@@ -56,7 +56,13 @@ module Levels
       Levels::Configuration.new(levels)
     end
 
-    # This class transforms a String into a level data.
+    # This class transforms any supported object into Level data. The object
+    # can be any of:
+    #
+    #   * A file path to Ruby, JSON or YAML
+    #   * Ruby, JSON or YAML code
+    #   * An object that responds to `#read(level)`.
+    #
     class Input
 
       def initialize(source)
@@ -64,6 +70,7 @@ module Levels
       end
 
       # Read the input into a Level.
+      # Raises an ArgumentError if the source cannot be used as an input.
       def read(level)
         input.read(level)
       end
