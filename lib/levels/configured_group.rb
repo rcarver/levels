@@ -1,4 +1,6 @@
 module Levels
+  # A ConfiguredGroup is the union of one or more Groups. When a key is read,
+  # the value returned is the value from the last Level that defines that key.
   class ConfiguredGroup
     include Levels::MethodMissing
 
@@ -15,16 +17,16 @@ module Levels
     # value_key - Symbol name of the value.
     #
     # Returns the value stored at that key.
-    # Raises Levels::UnknownKey if the value is not defined.
+    # Raises Levels::UnknownKey if the key is not defined.
     def [](value_key)
       raise UnknownKey unless self.defined?(value_key)
       values = @group_observer.observe_values(@levels, @group_key, value_key)
       values.final_value
     end
 
-    # Public: Determine if a value is defined.
+    # Public: Determine if a key is defined.
     #
-    # value_key - Symbol name of the value.
+    # value_key - Symbol name of the key.
     #
     # Returns a Boolean.
     def defined?(value_key)

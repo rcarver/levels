@@ -44,7 +44,7 @@ module Levels
   UnknownKey = Class.new(StandardError)
 
   # Public: Begin a new setup. The setup is used to add one or more
-  # levels, resulting in a Configuration.
+  # levels, then merged into a configuration.
   #
   # Examples
   #
@@ -58,7 +58,7 @@ module Levels
     Levels::Setup.new
   end
 
-  # Public: Get a Configuration by using the setup.
+  # Public: Get a merged configuration by using the setup.
   #
   # Examples
   #

@@ -1,5 +1,5 @@
 module Levels
-  # An env group is a set of key/value pairs containing the actual data.
+  # A group is a set of key/value pairs containing your data.
   #
   # Examples
   #

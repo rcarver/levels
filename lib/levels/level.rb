@@ -1,4 +1,7 @@
 module Levels
+  # A Level is a named set of groups. A Configuration is made up of multiple
+  # levels with clear semantics on how those levels are merged. You generally won't
+  # instantiate a Level directly, but instead load one from an external source.
   class Level
     include Levels::MethodMissing
 
