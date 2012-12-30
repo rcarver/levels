@@ -8,15 +8,15 @@ require "levels/method_missing"
 require "levels/runtime"
 
 require "levels/audit"
+require "levels/configuration"
 require "levels/event_handler"
 require "levels/group"
 require "levels/key"
 require "levels/key_values"
 require "levels/lazy_evaluator"
 require "levels/level"
-require "levels/merged"
-require "levels/merged_group"
 require "levels/setup"
+require "levels/merged_group"
 
 require "levels/input/json"
 require "levels/input/ruby"
@@ -44,7 +44,7 @@ module Levels
   UnknownKey = Class.new(StandardError)
 
   # Public: Begin a new setup. The setup is used to add one or more
-  # levels, then get a merged configuration.
+  # levels, resulting in a Configuration.
   #
   # Examples
   #
@@ -58,7 +58,7 @@ module Levels
     Levels::Setup.new
   end
 
-  # Public: Get a merged configuration by using the setup.
+  # Public: Get a Configuration by using the setup.
   #
   # Examples
   #
@@ -67,7 +67,7 @@ module Levels
   #     setup.add_system
   #   end
   #
-  # Returns a Levels::Merged.
+  # Returns a Levels::Configuration.
   def self.merge
     setup = self.setup
     yield setup if block_given?

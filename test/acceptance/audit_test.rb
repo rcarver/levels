@@ -36,10 +36,10 @@ describe "acceptance: the audit observers" do
   let(:levels) { [] }
 
   # The merged view of the levels.
-  let(:merged) { Levels::Merged.new(levels) }
+  let(:configuration) { Levels::Configuration.new(levels) }
 
   # Computed values are evaluated against the merged levels.
-  let(:lazy_evaluator) { Levels::LazyEvaluator.new(merged) }
+  let(:lazy_evaluator) { Levels::LazyEvaluator.new(configuration) }
 
   # The root observer performing the audit.
   let(:root_observer) { Levels::Audit.start(lazy_evaluator) }
@@ -56,11 +56,11 @@ describe "acceptance: the audit observers" do
     levels << level1
     levels << level2
 
-    # The auditor must be assigned to the merged levels, else nested values get
+    # The auditor must be assigned to the configuration, else nested values get
     # confused since the value is ultimately accessed via the LazyEvaluator's
     # levels reference. The point is, we're doing something weird here by using
     # the auditor directly.
-    merged.instance_variable_set(:@root_observer, root_observer)
+    configuration.instance_variable_set(:@root_observer, root_observer)
   end
 
   # A custom event handler to collect the values that are observed.

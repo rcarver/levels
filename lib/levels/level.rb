@@ -1,10 +1,4 @@
 module Levels
-  # An env level is a collection of groups. Your env will
-  # typically involve multiple levels such as base, cluster and node. Each
-  # level is stored separately so that, for example, when a lower level
-  # overrides the values at a higher level the behavior is clear and
-  # traceable. Levels are combined via the Levels::Merged
-  # model which defines the override and union symantics.
   class Level
     include Levels::MethodMissing
 

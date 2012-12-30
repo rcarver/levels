@@ -1,9 +1,9 @@
 module Levels
-  # Merging is the union if one or more env levels.
-  class Merged
+  # A Configuration is the merging of one or more levels.
+  class Configuration
     include Levels::MethodMissing
 
-    # Internal: Initialze a new merge.
+    # Internal: Initialze a new configuration.
     #
     # levels - Array of Levels::Level.
     #
@@ -44,7 +44,7 @@ module Levels
     end
 
     def to_s
-      "<Levels::Merged #{@levels.map { |l| l._level_name }.join(', ')}>"
+      "<Levels::Configuration #{@levels.map { |l| l._level_name }.join(', ')}>"
     end
 
     # Returns an Enumerator which yields [gruop_name, Group#to_enum].

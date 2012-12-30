@@ -18,10 +18,10 @@ group :names
 
     stream = StringIO.new
 
-    merged = Levels::Merged.new([level1, level2])
-    merged.event_handler = Levels::CliEventHandler.new(stream)
+    configuration = Levels::Configuration.new([level1, level2])
+    configuration.event_handler = Levels::CliEventHandler.new(stream)
 
-    merged.names.full_name
+    configuration.names.full_name
 
     stream.string.must_equal <<-STR
 > names.full_name

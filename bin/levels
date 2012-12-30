@@ -107,17 +107,17 @@ if @system
   @setup.add_system @system_input_prefix, level_name, ENV
 end
 
-# Write the merged configuration to stdout.
+# Write the configuration to stdout.
 if @output && (@files.any? || @system)
-  merged = @setup.merge
-  merged.event_handler = Levels::CliEventHandler.new(STDERR, @colorize)
+  configuration = @setup.merge
+  configuration.event_handler = Levels::CliEventHandler.new(STDERR, @colorize)
 
   case @output_format
   when "json"
-    STDOUT.puts Levels.write_json(merged)
+    STDOUT.puts Levels.write_json(configuration)
   when "yaml"
-    STDOUT.puts Levels.write_yaml(merged)
+    STDOUT.puts Levels.write_yaml(configuration)
   when "system"
-    STDOUT.puts Levels.write_system(merged, @system_output_prefix)
+    STDOUT.puts Levels.write_system(configuration, @system_output_prefix)
   end
 end

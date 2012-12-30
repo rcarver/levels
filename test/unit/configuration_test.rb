@@ -1,11 +1,11 @@
 require 'helper'
 
-describe Levels::Merged do
+describe Levels::Configuration do
 
   let(:level1) { Levels::Level.new("l1") }
   let(:level2) { Levels::Level.new("l2") }
 
-  subject { Levels::Merged.new([level1, level2]) }
+  subject { Levels::Configuration.new([level1, level2]) }
 
   before do
     level1.set_group(:g1, a: 1)
@@ -15,7 +15,7 @@ describe Levels::Merged do
   end
 
   specify "#to_s" do
-    subject.to_s.must_equal "<Levels::Merged l1, l2>"
+    subject.to_s.must_equal "<Levels::Configuration l1, l2>"
   end
 
   it "allows groups to be retrieved" do

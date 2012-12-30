@@ -36,16 +36,16 @@ module Levels
       @inputs << [level, input]
     end
 
-    # Public: Parse all inputs sources and get a merged configuration.
+    # Public: Parse all inputs sources and get a Configuration.
     #
-    # Returns a Levels::Merged.
+    # Returns a Levels::Configuration.
     def merge
       levels = []
       @inputs.each do |level_proc, input|
         level = level_proc.call
         case input
         when Proc
-          template = Levels::Merged.new(levels)
+          template = Levels::Configuration.new(levels)
           input = input.call(template.to_enum)
           input.read(level)
         else
@@ -53,7 +53,7 @@ module Levels
         end
         levels << level
       end
-      Levels::Merged.new(levels)
+      Levels::Configuration.new(levels)
     end
 
     # This class transforms a String into a level data.

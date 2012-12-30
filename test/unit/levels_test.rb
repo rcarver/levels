@@ -7,17 +7,17 @@ describe Levels do
   end
 
   specify ".merge" do
-    Levels.merge.must_be_instance_of Levels::Merged
+    Levels.merge.must_be_instance_of Levels::Configuration
   end
 
   specify ".merge with a block" do
     block_called = false
-    merged = Levels.merge do |setup|
+    configuration = Levels.merge do |setup|
       block_called = true
       setup.must_be_instance_of Levels::Setup
     end
     block_called.must_equal true
-    merged.must_be_instance_of Levels::Merged
+    configuration.must_be_instance_of Levels::Configuration
   end
 end
 
