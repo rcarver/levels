@@ -17,7 +17,7 @@ module Levels
     # value_transformer - Proc that takes (key, value) and returns value.
     #
     def initialize(data = {}, value_transformer = nil)
-      @key_values = Levels::KeyValues.new(data)
+      @values = Levels::KeyValues.new(data)
       @value_transformer = value_transformer || -> key, value { value }
     end
 
@@ -25,12 +25,12 @@ module Levels
     #
     # Returns the value.
     # Raises Levels::UnknownKey if the key is not defined.
-    def [](key)
-      if @key_values.key?(key)
-        key, value = @key_values.pair(key)
+    def [](value_key)
+      if @values.key?(value_key)
+        key, value = @values.pair(value_key)
         @value_transformer.call(key.to_sym, value)
       else
-        raise UnknownKey, "#{key.inspect} is not defined in #{self}"
+        raise UnknownKey, "#{value_key.inspect} is not defined in #{self}"
       end
     end
 
@@ -38,7 +38,7 @@ module Levels
     #
     # Returns a Boolean.
     def defined?(key)
-      @key_values.key?(key)
+      @values.key?(key)
     end
 
     def to_s
@@ -48,14 +48,14 @@ module Levels
     # Returns an Enumerator which yields [key, value].
     def to_enum
       Enumerator.new do |y|
-        @key_values.each do |key, value|
+        @values.each do |key, value|
           y << [key.to_sym, self[key]]
         end
       end
     end
 
     def eql_hash?(hash)
-      @key_values == Levels::KeyValues.new(hash)
+      @values == Levels::KeyValues.new(hash)
     end
   end
 end
