@@ -1,11 +1,11 @@
 require 'helper'
 
-describe Levels::MergedGroup do
+describe Levels::ConfiguredGroup do
 
   let(:levels) { [] }
   let(:group_observer) { MiniTest::Mock.new }
 
-  subject { Levels::MergedGroup.new(levels, :test, group_observer) }
+  subject { Levels::ConfiguredGroup.new(levels, :test, group_observer) }
 
   def define_value(key, value)
     level = Levels::Level.new("one")

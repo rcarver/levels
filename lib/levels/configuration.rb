@@ -26,12 +26,12 @@ module Levels
     #
     # group_key - Symbol name of the group.
     #
-    # Returns a Levels::MergedGroup.
+    # Returns a Levels::ConfiguredGroup.
     # Raises Levels::UnknownGroup if the group is not defined.
     def [](group_key)
       raise UnknownGroup unless self.defined?(group_key)
       group_observer = @root_observer.observe_group(@event_handler)
-      Levels::MergedGroup.new(@levels, group_key, group_observer)
+      Levels::ConfiguredGroup.new(@levels, group_key, group_observer)
     end
 
     # Public: Determine if a group is defined.

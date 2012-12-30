@@ -19,11 +19,11 @@ describe Levels::Configuration do
   end
 
   it "allows groups to be retrieved" do
-    subject.g1.must_be_instance_of Levels::MergedGroup
-    subject[:g1].must_be_instance_of Levels::MergedGroup
+    subject.g1.must_be_instance_of Levels::ConfiguredGroup
+    subject[:g1].must_be_instance_of Levels::ConfiguredGroup
   end
 
-  it "initializes the merged group with the right levels" do
+  it "initializes the configured group with the right levels" do
     subject.g1.a.must_equal 9
     subject.g1.b?.must_equal false
 

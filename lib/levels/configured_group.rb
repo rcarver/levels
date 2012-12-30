@@ -1,10 +1,8 @@
 module Levels
-  # A merged group contains the union of keys from a set of groups. However,
-  # the value of a key is the value of the last group.
-  class MergedGroup
+  class ConfiguredGroup
     include Levels::MethodMissing
 
-    # Internal: Initialize a merged group.
+    # Internal: Initialize a configured group.
     #
     def initialize(levels, group_key, group_observer)
       @levels = levels
@@ -34,7 +32,7 @@ module Levels
     end
 
     def to_s
-      "<Levels::MergedGroup #{@group_key}>"
+      "<Levels::ConfiguredGroup #{@group_key}>"
     end
 
     # Returns an Enumerator which yields [key, value].
