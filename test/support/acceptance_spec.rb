@@ -5,24 +5,22 @@ class AcceptanceSpec < MiniTest::Spec
     desc =~ /^acceptance:/
   end
 
-  def self.let_standard_level(name = :level)
-    let(name) {
-      level = Levels::Level.new("standard level")
-      level.set_group(:types,
-        string: "hello",
-        integer: 123,
-        float: 1.5,
-        boolean_true: true,
-        boolean_false: false,
-        array_of_string: ["a", "b", "c"],
-        array_of_integer: [1, 2, 3],
-        null: nil
-      )
-      level.set_group(:group2,
-        message: "hello world"
-      )
-      level
-    }
+  def standard_data_types_level(name = :level)
+    level = Levels::Level.new("standard data types")
+    level.set_group(:types,
+      string: "hello",
+      integer: 123,
+      float: 1.5,
+      boolean_true: true,
+      boolean_false: false,
+      array_of_string: ["a", "b", "c"],
+      array_of_integer: [1, 2, 3],
+      null: nil
+    )
+    level.set_group(:group2,
+      message: "hello world"
+    )
+    level
   end
 
   def self.assert_sample_data_set

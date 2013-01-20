@@ -7,12 +7,9 @@ describe "acceptance: write json" do
     output.generate(level.to_enum)
   end
 
-  let_standard_level
-
-  subject { write_json(level) }
-
   it "converts to JSON" do
-    subject.must_equal <<-JSON.chomp
+    output = write_json(standard_data_types_level)
+    output.must_equal <<-JSON.chomp
 {
   "types": {
     "string": "hello",

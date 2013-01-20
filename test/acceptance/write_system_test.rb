@@ -8,12 +8,9 @@ describe "acceptance: write system" do
     output.generate(level.to_enum)
   end
 
-  let_standard_level
-
-  subject { write_system(level) }
-
   it "converts to ENV variables" do
-    subject.must_equal <<-ENV.chomp
+    output = write_system(standard_data_types_level)
+    output.must_equal <<-ENV.chomp
 export TYPES_STRING="hello"
 export TYPES_STRING_TYPE="string"
 export TYPES_INTEGER="123"

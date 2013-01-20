@@ -7,12 +7,9 @@ describe "acceptance: write yaml" do
     output.generate(level.to_enum)
   end
 
-  let_standard_level
-
-  subject { write_yaml(level) }
-
   it "converts to YAML" do
-    subject.must_equal <<-JSON.sub(/'null':$/, '\0 ') # Handle trailing space for null.
+    output = write_yaml(standard_data_types_level)
+    output.must_equal <<-JSON.sub(/'null':$/, '\0 ') # Handle trailing space for null.
 ---
 types:
   string: hello
