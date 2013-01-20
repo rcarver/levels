@@ -3,7 +3,7 @@ module Levels
     # This input provides a DSL for writing levels in ruby.
     class Ruby
 
-      def initialize(ruby_string, file, line = 1)
+      def initialize(ruby_string, file = "Code in Memory", line = 1)
         @ruby_string = ruby_string
         @file = file
         @line = line
