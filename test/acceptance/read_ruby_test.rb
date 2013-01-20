@@ -3,6 +3,13 @@ require 'tempfile'
 
 describe "acceptance: read ruby" do
 
+  def read_ruby(level_name, ruby_string)
+    level = Levels::Level.new(level_name)
+    input = Levels::Input::Ruby.new(ruby_string)
+    input.read(level)
+    level
+  end
+
   describe "types" do
 
     let(:ruby) {
@@ -22,7 +29,7 @@ group "group2"
       RUBY
     }
 
-    subject { Levels.read_ruby("the ruby", ruby) }
+    subject { read_ruby("test", ruby) }
 
     assert_sample_data_set
   end
@@ -45,8 +52,8 @@ group "names"
       RUBY
     }
 
-    let(:level1) { Levels.read_ruby("the ruby", level1_ruby) }
-    let(:level2) { Levels.read_ruby("the ruby", level2_ruby) }
+    let(:level1) { read_ruby("ruby level 1", level1_ruby) }
+    let(:level2) { read_ruby("ruby level 2", level2_ruby) }
 
     subject { Levels::Configuration.new([level1, level2]) }
 
@@ -60,11 +67,14 @@ group "names"
     let(:ruby_file) { f("file.rb") }
 
     def read_ruby_with_file_path_path(path)
-      Levels::Configuration.new([Levels.read_ruby("the ruby", <<-RUBY, ruby_file.to_s)])
+      input = Levels::Input::Ruby.new(<<-RUBY, ruby_file.to_s)
 group "group1"
   set message: file("#{path}")
   set lazy_message: -> { file("#{path}") }
       RUBY
+      level = Levels::Level.new("test")
+      input.read(level)
+      Levels::Configuration.new([level])
     end
 
     it "reads a file in the same directory" do

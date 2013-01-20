@@ -2,6 +2,13 @@ require 'helper'
 
 describe "acceptance: read json" do
 
+  def read_json(level_name, json_string)
+    level = Levels::Level.new(level_name)
+    input = Levels::Input::JSON.new(json_string)
+    input.read(level)
+    level
+  end
+
   let(:json) {
     <<-JSON
 {
@@ -22,7 +29,7 @@ describe "acceptance: read json" do
     JSON
   }
 
-  subject { Levels.read_json("the json", json) }
+  subject { read_json("test", json) }
 
   assert_sample_data_set
 end

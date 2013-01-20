@@ -2,6 +2,13 @@ require 'helper'
 
 describe "acceptance: read yaml" do
 
+  def read_yaml(level_name, yaml_string)
+    level = Levels::Level.new(level_name)
+    input = Levels::Input::YAML.new(yaml_string)
+    input.read(level)
+    level
+  end
+
   let(:yaml) {
     <<-YAML
 types:
@@ -24,7 +31,7 @@ group2:
     YAML
   }
 
-  subject { Levels.read_yaml("the yaml", yaml) }
+  subject { read_yaml("test", yaml) }
 
   assert_sample_data_set
 end

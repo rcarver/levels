@@ -2,6 +2,14 @@ require 'helper'
 
 describe "acceptance: read system" do
 
+  def read_system(level_name, template, prefix, env)
+    key_formatter = Levels::System::KeyFormatter.new(prefix)
+    level = Levels::Level.new(level_name)
+    input = Levels::Input::System.new(template, key_formatter, env)
+    input.read(level)
+    level
+  end
+
   describe "using typecast information" do
 
     let(:template) {
@@ -43,7 +51,7 @@ describe "acceptance: read system" do
       }
     }
 
-    subject { Levels.read_system("the system", template.to_enum, nil, env) }
+    subject { read_system("the system", template.to_enum, nil, env) }
 
     assert_sample_data_set
   end
@@ -82,7 +90,7 @@ describe "acceptance: read system" do
       }
     }
 
-    subject { Levels.read_system("the system", template.to_enum, nil, env) }
+    subject { read_system("the system", template.to_enum, nil, env) }
 
     assert_sample_data_set
   end
@@ -103,7 +111,7 @@ describe "acceptance: read system" do
       }
     }
 
-    subject { Levels.read_system("the system", template.to_enum, "PREFIX_", env) }
+    subject { read_system("the system", template.to_enum, "PREFIX_", env) }
 
     it "finds values" do
       subject.group.message.must_equal "hello world"
