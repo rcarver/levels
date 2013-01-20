@@ -2,9 +2,14 @@ require 'helper'
 
 describe "acceptance: write json" do
 
+  def write_json(level)
+    output = Levels::Output::JSON.new
+    output.generate(level.to_enum)
+  end
+
   let_standard_level
 
-  subject { Levels.write_json(level) }
+  subject { write_json(level) }
 
   it "converts to JSON" do
     subject.must_equal <<-JSON.chomp

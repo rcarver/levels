@@ -73,21 +73,5 @@ module Levels
     yield setup if block_given?
     setup.merge
   end
-
-  def self.write_json(level, json_opts = nil)
-    output = Levels::Output::JSON.new(json_opts)
-    output.generate(level.to_enum)
-  end
-
-  def self.write_yaml(level)
-    output = Levels::Output::YAML.new
-    output.generate(level.to_enum)
-  end
-
-  def self.write_system(level, prefix = nil)
-    key_formatter = Levels::System::KeyFormatter.new(prefix)
-    output = Levels::Output::System.new(key_formatter)
-    output.generate(level.to_enum)
-  end
 end
 

@@ -112,12 +112,19 @@ if @output && (@files.any? || @system)
   configuration = @setup.merge
   configuration.event_handler = Levels::CliEventHandler.new(STDERR, @colorize)
 
+  output = nil
+
   case @output_format
   when "json"
-    STDOUT.puts Levels.write_json(configuration)
+    output = Levels::Output::JSON.new
   when "yaml"
-    STDOUT.puts Levels.write_yaml(configuration)
+    output = Levels::Output::YAML.new
   when "system"
-    STDOUT.puts Levels.write_system(configuration, @system_output_prefix)
+    key_formatter = Levels::System::KeyFormatter.new(@system_output_prefix)
+    output = Levels::Output::System.new(key_formatter)
+  end
+
+  if output
+    STDOUT.puts output.generate(configuration.to_enum)
   end
 end

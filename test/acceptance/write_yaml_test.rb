@@ -2,9 +2,14 @@ require 'helper'
 
 describe "acceptance: write yaml" do
 
+  def write_yaml(level)
+    output = Levels::Output::YAML.new
+    output.generate(level.to_enum)
+  end
+
   let_standard_level
 
-  subject { Levels.write_yaml(level) }
+  subject { write_yaml(level) }
 
   it "converts to YAML" do
     subject.must_equal <<-JSON.sub(/'null':$/, '\0 ') # Handle trailing space for null.

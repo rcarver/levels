@@ -2,9 +2,15 @@ require 'helper'
 
 describe "acceptance: write system" do
 
+  def write_system(level, prefix = nil)
+    key_formatter = Levels::System::KeyFormatter.new(prefix)
+    output = Levels::Output::System.new(key_formatter)
+    output.generate(level.to_enum)
+  end
+
   let_standard_level
 
-  subject { Levels.write_system(level) }
+  subject { write_system(level) }
 
   it "converts to ENV variables" do
     subject.must_equal <<-ENV.chomp
