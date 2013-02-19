@@ -38,6 +38,7 @@ group:
         end
       end
       custom = custom_input.new
+
       subject.add("custom", custom)
       subject.merge.group.a.must_equal 1
     end
@@ -101,6 +102,14 @@ group:
       ensure
         ENV.delete('PFX_GROUP_A')
       end
+    end
+
+    it "adds a Level" do
+      level = Levels::Level.new("test")
+      level.set_group(:group, a: 1)
+
+      subject.add_level(level)
+      subject.merge.group.a.must_equal 1
     end
   end
 end

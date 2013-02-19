@@ -36,6 +36,15 @@ module Levels
       @inputs << [level, input]
     end
 
+    # Public: Add an already initialized Level.
+    #
+    # level - Levels::Level.
+    #
+    # Returns nothing.
+    def add_level(level)
+      @inputs << [-> { level }, NullInput.new]
+    end
+
     # Public: Parse all inputs sources and get a Configuration.
     #
     # Returns a Levels::Configuration.
@@ -54,6 +63,13 @@ module Levels
         levels << level
       end
       Levels::Configuration.new(levels)
+    end
+
+    class NullInput
+
+      def read(level)
+        # noop
+      end
     end
 
     # This class transforms any supported object into Level data. The object
