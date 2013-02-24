@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["ryan@ryancarver.com"]
   gem.description   = %q{A tool for reading and writing configuration data.}
   gem.summary       = %q{A tool for reading and writing configuration data.}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/rcarver/levels"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
