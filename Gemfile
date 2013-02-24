@@ -6,6 +6,7 @@ gemspec
 group :test do
   gem "guard"
   gem "guard-minitest"
-  gem 'ruby_gntp'
+  gem "rb-fsevent"
+  gem "terminal-notifier-guard"
   gem 'fivemat'
 end
