@@ -3,7 +3,7 @@ require 'rake/testtask'
 desc "Run all tests"
 task :default => :testall
 
-desk "Run all of the tests"
+desc "Run all of the tests"
 task :testall => [:test, :examples]
 
 desc "Run the unit tests"
