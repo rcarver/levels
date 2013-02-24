@@ -2,9 +2,10 @@
 
 [![Build Status](https://secure.travis-ci.org/rcarver/levels.png)](http://travis-ci.org/rcarver/levels)
 
-Levels is a tool for reading and writing configuration data. A level is
-a set of key/value pairs that represent your data. Multiple levels are
-merged in a predictable, useful way to form your configuration.
+Levels is a tool for merging configuration data. A level is a set of
+key/value pairs that represent your data. Multiple levels, written in a
+variety of formats can be merged in a predictable, useful way to form
+a final configuration.
 
   > **KRAMER:** *I'm completely changing the configuration of the apartment. You're not gonna believe it when you see it. A whole new lifestyle.*
 
@@ -14,9 +15,9 @@ merged in a predictable, useful way to form your configuration.
 
 ## Creating a level
 
-Each level is made up of one or more groups. Each group is a set of
-key/value pairs. To describe a very simple web application made up of a
-server and a task queue, you could write this (in JSON).
+A level is made up of one or more groups. A group is a set of key/value
+pairs. To describe a very simple web application made up of a server and
+a task queue, you could write this (in JSON).
 
 ```json
 {
@@ -34,7 +35,7 @@ Now consider having a common "base" configuration, with slight
 differences in development and production. Our base configuration
 defines the possible keys, with default values.
 
-A "production" level could override the relevant values like this.
+A "production" level can override the relevant values like this.
 
 ```json
 {
@@ -55,9 +56,9 @@ variable.
 TASK_QUEUE_WORKERS="10"
 ```
 
-### Writing a configuration
+### Writing a level
 
-Levels may be written in several formats.
+A level may be written in one of many formats.
 
   * **RUBY** is the most common and powerful for hand written configs.
   * **JSON** is convenient for machine generated configs.
@@ -84,8 +85,9 @@ Therefore, Levels only supports the following types:
   * **null** (Ruby `NilClass`)
 
 Notice that JSON's Object is not supported. This is because groups are
-objects, so key/values pairs are already available. As well, it's
-difficult to represent key/value pairs in an environment variable.
+objects, so key/values pairs are already available. It's difficult to
+represent key/value pairs in an environment variable, so it fails that
+test as well.
 
 Fortunately, these simple types are perfectly adequate for the purposes
 of system configuration.
@@ -125,6 +127,13 @@ module Levels::Runtime
     -> { SHA.decrypt(encrypted_value, secret_keys.sha_key) }
   end
 end
+```
+
+With this runtime helper, you can now write:
+
+```ruby
+group :aws
+  set secret_key: encrypted("your aws secret key")
 ```
 
 ##### Builtin runtime extensions
@@ -196,7 +205,7 @@ based on the key's type in the "base" level. Or, you may define each
 value's type explicitly.
 
 To set the type of a value, set `<GROUP>_<KEY>_TYPE` to one of the
-following values:
+following:
 
   * `string` - The value is taken as is.
   * `integer` - The value is converted to an integer via Ruby's `to_i`.
@@ -234,13 +243,12 @@ SAMPLE_MY_CSV_ARRAY_DELIMITER=","
 
 ## Using a Configuration
 
-Once a level has been written, Levels can read and merge it. Once merged
+Once a level has been written, you can read and merge it. Once merged
 into a Configuration, you can use it at runtime in a Ruby process, or
 output it as JSON, YAML or environment variables.
 
-In any case, any number of levels, including the system environment, may
-be merged. The system environment is typically merged last, but it's not
-required.
+Any number of levels, including the system environment, may be merged.
+The system environment is typically merged last, but it's not required.
 
 **From the command line**, Levels can generate JSON, YAML or environment
 variables. The generated configuration is written to STDOUT. Both JSON
@@ -263,7 +271,7 @@ can build one with `Levels.merge`.
 # Merge multiple input levels from various sources - file, API and
 # environment variables.
 config = Levels.merge do |levels|
-  levels.add "Base", HTTP.get("http://server/config.json")
+  levels.add "Base", HTTP.get("https://server/config.json")
   levels.add "Prod", "prod.json"
   levels.add_system
 end
