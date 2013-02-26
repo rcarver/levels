@@ -100,7 +100,7 @@ module Levels
         when :ruby   then Levels::Input::Ruby.new(source, *args)
         when :json   then Levels::Input::JSON.new(source)
         when :yaml   then Levels::Input::YAML.new(source)
-        else raise ArgumentError, "Could not identify the format"
+        else raise ArgumentError, "Could not identify the format (#{format.inspect})"
         end
       end
 
