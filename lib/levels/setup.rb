@@ -100,7 +100,7 @@ module Levels
         when :ruby   then Levels::Input::Ruby.new(source, *args)
         when :json   then Levels::Input::JSON.new(source)
         when :yaml   then Levels::Input::YAML.new(source)
-        else raise ArgumentError, "Could not identify the format (#{format.inspect})"
+        else raise ArgumentError, "Could not identify the format: #{format.inspect}"
         end
       end
 
@@ -116,12 +116,14 @@ module Levels
           when ".rb"           then [:ruby, pn.read, pn.to_s, 1]
           when ".json"         then [:json, pn.read]
           when ".yaml", ".yml" then [:yaml, pn.read]
+          else raise ArgumentError, "Could not identify the file type: #{pn.extname}"
           end
         else
           case @source
           when /\A\w*{/     then [:json, @source]
           when /\A---$/     then [:yaml, @source]
           when /\A\w*group/ then [:ruby, @source, "Code from String", 1]
+          else raise ArgumentError, "Could not identify the source: #{@source.inspect}"
           end
         end
       end
