@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This example shows how to store and read a value from a file.
 #
