@@ -19,7 +19,7 @@ boolean_true = true
 boolean_false = false
 array_of_string = ["a", "b", "c"]
 array_of_integer = [1, 2, 3]
-null = "excluding this causes a parse error, but shouldn't that define a nil value?"
+null = "TOML does not have a way to define NULL"
 [group2]
 message = "hello world"
     TOML
