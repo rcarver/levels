@@ -1,6 +1,6 @@
 # Levels
 
-[![Build Status](https://secure.travis-ci.org/rcarver/levels.png)](http://travis-ci.org/rcarver/levels)
+[![Build Status](https://api.travis-ci.org/rcarver/levels.png?branch=master)](http://travis-ci.org/rcarver/levels)
 
 Levels is a tool for merging configuration data. A level is a set of
 key/value pairs that represent your data. Multiple levels, written in a
