@@ -2,6 +2,12 @@ require "json"
 require "yaml"
 require "open3"
 
+begin
+  require "toml"
+rescue
+  # TOML is optional.
+end
+
 require "levels/version"
 
 require "levels/method_missing"
@@ -21,6 +27,7 @@ require "levels/setup"
 require "levels/input/json"
 require "levels/input/ruby"
 require "levels/input/system"
+require "levels/input/toml"
 require "levels/input/yaml"
 
 require "levels/output/json"
