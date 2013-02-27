@@ -133,7 +133,7 @@ With this runtime helper, you can now write:
 
 ```ruby
 group :aws
-  set secret_key: encrypted("your aws secret key")
+  set secret_key: encrypted("your encrypted aws secret key")
 ```
 
 ##### Builtin runtime extensions
