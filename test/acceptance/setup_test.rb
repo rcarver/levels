@@ -23,6 +23,13 @@ group :group
       JSON
     end
 
+    let(:toml_code) do
+      <<-TOML
+[group]
+a = 1
+      TOML
+    end
+
     let(:yaml_code) do
       <<-YAML
 ---
@@ -53,6 +60,11 @@ group:
       subject.merge.group.a.must_equal 1
     end
 
+    it "adds TOML code" do
+      subject.add("code", toml_code)
+      subject.merge.group.a.must_equal 1
+    end
+
     it "adds YAML code" do
       subject.add("code", yaml_code)
       subject.merge.group.a.must_equal 1
@@ -66,6 +78,12 @@ group:
 
     it "adds a JSON file" do
       file = w("input.json", json_code)
+      subject.add("file", file.to_s)
+      subject.merge.group.a.must_equal 1
+    end
+
+    it "adds a TOML file" do
+      file = w("input.toml", toml_code)
       subject.add("file", file.to_s)
       subject.merge.group.a.must_equal 1
     end

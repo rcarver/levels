@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in config-env.gemspec
 gemspec
 
+gem "toml"
+
 group :test do
   gem "guard"
   gem "guard-minitest"

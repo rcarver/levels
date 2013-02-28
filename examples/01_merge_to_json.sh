@@ -3,7 +3,7 @@
 # This example sets up three levels:
 #
 #   * "Base" from examples/01_base.rb
-#   * "Prod" from examples/01_prod.json
+#   * "Prod" from examples/01_prod.toml
 #   * "System Environment" with no prefix.
 #
 # Base defines the possible keys with default vaules, Prod changes a few of
@@ -23,5 +23,5 @@ bundle exec levels \
   --level "Prod" \
   --system \
   $examples/01_base.rb \
-  $examples/01_prod.json
+  $examples/01_prod.toml
 
