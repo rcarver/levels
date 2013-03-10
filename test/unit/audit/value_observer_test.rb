@@ -45,8 +45,8 @@ describe Levels::Audit::ValueObserver do
     levels = [level1, level2, level3, level4]
 
     # Translate the initial values into something else.
-    lazy_evaluator.expect(:call, 11, [1])
-    lazy_evaluator.expect(:call, 22, [2])
+    lazy_evaluator.expect(:call, 11, [Levels::Value.new(1)])
+    lazy_evaluator.expect(:call, 22, [Levels::Value.new(2)])
 
     values = subject.observe_values(levels, :group, :a)
 
