@@ -20,8 +20,9 @@ module Levels
     # Raises Levels::UnknownKey if the key is not defined.
     def [](value_key)
       raise UnknownKey unless self.defined?(value_key)
-      values = @group_observer.observe_values(@levels, @group_key, value_key)
-      values.final_value
+      audit_values = @group_observer.observe_values(@levels, @group_key, value_key)
+      audit_value = audit_values.final_value
+      audit_value.value
     end
 
     # Public: Determine if a key is defined.

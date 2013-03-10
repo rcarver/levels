@@ -15,7 +15,7 @@ describe Levels::ConfiguredGroup do
 
   def observe_value(key, value)
     observed_values = MiniTest::Mock.new
-    observed_values.expect(:final_value, value)
+    observed_values.expect(:final_value, Levels::Value.new(value))
     group_observer.expect(:observe_values, observed_values, [levels, :test, key])
   end
 
