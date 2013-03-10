@@ -3,9 +3,8 @@ require 'helper'
 describe Levels::Group do
 
   let(:hash) { {} }
-  let(:value_transformer) { nil }
 
-  subject { Levels::Group.new(hash, value_transformer) }
+  subject { Levels::Group.new(hash) }
 
   before do
     hash[:name] = "ok"
@@ -51,19 +50,6 @@ describe Levels::Group do
       hash["string"] = 123
       subject.string.must_equal 123
       subject[:string].must_equal 123
-    end
-  end
-
-  describe "initialized with a value transformer" do
-
-    let(:value_transformer) {
-      -> key, value { [key, value] }
-    }
-
-    it "returns the value via the transformer" do
-      subject.name.must_equal [:name, "ok"]
-      subject[:name].must_equal [:name, "ok"]
-      subject["name"].must_equal [:name, "ok"]
     end
   end
 

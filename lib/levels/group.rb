@@ -13,12 +13,10 @@ module Levels
 
     # Internal: Initialize a new group.
     #
-    # data              - Hash of key/values for the group.
-    # value_transformer - Proc that takes (key, value) and returns value.
+    # data - Hash of key/values for the group.
     #
-    def initialize(data = {}, value_transformer = nil)
+    def initialize(data = {})
       @values = Levels::KeyValues.new(data)
-      @value_transformer = value_transformer || -> key, value { value }
     end
 
     # Public: Get the value for a key.
@@ -28,7 +26,7 @@ module Levels
     def [](value_key)
       if @values.key?(value_key)
         key, value = @values.pair(value_key)
-        @value_transformer.call(key.to_sym, value)
+        value
       else
         raise UnknownKey, "#{value_key.inspect} is not defined in #{self}"
       end
