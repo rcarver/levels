@@ -69,7 +69,7 @@ describe Levels::Input::Ruby::DSL do
       group :one
       set key: "value"
     end
-    level.one.key.must_equal "value"
+    level.one.key.must_equal Levels::Value.new("value")
   end
 
   it "is an error to set a key outside of a group" do
@@ -104,30 +104,30 @@ describe Levels::Input::Ruby::DSL do
       subject.group :one
     end
 
-    def assert_key
+    def assert_key(key, value)
       subject.close_current_group
-      level.one.key.must_equal "value"
+      level.one[key].must_equal Levels::Value.new(value)
     end
 
     it "can be set as a ruby 1.9 hash" do
       subject.set key: "value"
-      assert_key
+      assert_key :key, "value"
     end
 
     it "can be set as a ruby 1.8 hash" do
       subject.set :key => "value"
-      assert_key
+      assert_key :key, "value"
     end
 
     it "is possible to set multiple keys via a hash" do
       subject.set :key => "value", :bar => "foo"
-      assert_key
-      level.one.bar.must_equal "foo"
+      assert_key :key, "value"
+      assert_key :bar, "foo"
     end
 
     it "can be set with two arguments" do
       subject.set :key, "value"
-      assert_key
+      assert_key :key, "value"
     end
 
     it "is an error to pass other types of args" do
