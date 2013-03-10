@@ -17,6 +17,7 @@ require "levels/key_values"
 require "levels/lazy_evaluator"
 require "levels/level"
 require "levels/setup"
+require "levels/value"
 
 require "levels/input/json"
 require "levels/input/ruby"

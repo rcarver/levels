@@ -17,15 +17,15 @@ describe Levels::Group do
   end
 
   it "allows hash access" do
-    subject[:name].must_equal "ok"
-    subject[:value].must_equal 123
-    subject[:other].must_equal nil
+    subject[:name].must_equal Levels::Value.new("ok")
+    subject[:value].must_equal Levels::Value.new(123)
+    subject[:other].must_equal Levels::Value.new(nil)
   end
 
   it "allows dot access" do
-    subject.name.must_equal "ok"
-    subject.value.must_equal 123
-    subject.other.must_equal nil
+    subject.name.must_equal Levels::Value.new("ok")
+    subject.value.must_equal Levels::Value.new(123)
+    subject.other.must_equal Levels::Value.new(nil)
   end
 
   it "raises an error if you access a nonexistent key" do
@@ -48,8 +48,8 @@ describe Levels::Group do
 
     it "converts everything to symbols" do
       hash["string"] = 123
-      subject.string.must_equal 123
-      subject[:string].must_equal 123
+      subject.string.must_equal Levels::Value.new(123)
+      subject[:string].must_equal Levels::Value.new(123)
     end
   end
 

@@ -21,12 +21,11 @@ module Levels
 
     # Public: Get the value for a key.
     #
-    # Returns the value.
+    # Returns a Levels::Value.
     # Raises Levels::UnknownKey if the key is not defined.
     def [](value_key)
       if @values.key?(value_key)
-        key, value = @values.pair(value_key)
-        value
+        Levels::Value.new(@values[value_key])
       else
         raise UnknownKey, "#{value_key.inspect} is not defined in #{self}"
       end
@@ -43,11 +42,12 @@ module Levels
       "<Levels::Group>"
     end
 
-    # Returns an Enumerator which yields [key, value].
+    # Returns an Enumerator which yields [key, value]. The key is a Symbol
+    #   and the value is any object.
     def to_enum
       Enumerator.new do |y|
         @values.each do |key, value|
-          y << [key.to_sym, self[key]]
+          y << [key.to_sym, self[key].value]
         end
       end
     end
