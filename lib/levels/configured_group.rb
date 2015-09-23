@@ -21,8 +21,7 @@ module Levels
     def [](value_key)
       raise UnknownKey unless self.defined?(value_key)
       audit_values = @group_observer.observe_values(@levels, @group_key, value_key)
-      audit_value = audit_values.final_value
-      audit_value.value
+      audit_values.final_value
     end
 
     # Public: Determine if a key is defined.
@@ -38,7 +37,8 @@ module Levels
       "<Levels::ConfiguredGroup #{@group_key}>"
     end
 
-    # Returns an Enumerator which yields [key, value].
+    # Returns an Enumerator which yields [key, value]. The key is a Symbol
+    #   and the value is any object.
     def to_enum
       Enumerator.new do |y|
         value_keys = Set.new
@@ -48,7 +48,7 @@ module Levels
           end
         end
         value_keys.each do |key|
-          y << [key, self[key]]
+          y << [key.to_sym, self[key].value]
         end
       end
     end
@@ -58,6 +58,11 @@ module Levels
     def groups
       levels = @levels.find_all { |level| level.defined?(@group_key) }
       levels.map { |level| level[@group_key] }
+    end
+
+    # Returns a Levels::Value.
+    # Raises Levels::UnknownKey if the key is not defined.
+    def value_for(value_key)
     end
   end
 end

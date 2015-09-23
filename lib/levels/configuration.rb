@@ -63,7 +63,34 @@ module Levels
     def [](group_key)
       raise UnknownGroup unless self.defined?(group_key)
       group_observer = @root_observer.observe_group(@event_handler)
-      Levels::ConfiguredGroup.new(@levels, group_key, group_observer)
+      group = Levels::ConfiguredGroup.new(@levels, group_key, group_observer)
+      GroupDecorator.new(group)
+    end
+
+    class GroupDecorator
+      include Levels::MethodMissing
+
+      def initialize(group)
+        @group = group
+      end
+
+      def [](value_key)
+        value = @group[value_key]
+        value.validate!
+        value.value
+      end
+
+      def defined?(value_key)
+        @group.defined?(value_key)
+      end
+
+      def to_s
+        @group.to_s
+      end
+
+      def to_enum
+        @group.to_enum
+      end
     end
 
     # Public: Determine if a group is defined. A group is defined if it exists
